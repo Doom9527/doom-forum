@@ -145,12 +145,6 @@
                 <version>${hutool-all}</version>
             </dependency>
 
-            <!-- Bean Validation参数校验器-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-validation</artifactId>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 </project>

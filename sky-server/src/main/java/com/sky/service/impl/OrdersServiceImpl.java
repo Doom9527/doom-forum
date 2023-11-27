@@ -133,8 +133,6 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
                 .phone(ordersDTO.getPhone())
                 .address(ordersDTO.getAddress())
                 .consignee(ordersDTO.getConsignee()).build();
-        //检查订单
-        checkOrdersNull(orders);
         baseMapper.insert(orders);
 
         //TODO 存入Redis缓存，持续时间为30min
@@ -149,13 +147,6 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
         return ordersVO;
     }
 
-    public void checkOrdersNull(Orders orders) {
-        if (Objects.isNull(orders.getUserId()) || Objects.isNull(orders.getUserName()) || Objects.isNull(orders.getPhone())
-                || Objects.isNull(orders.getAddress()) || Objects.isNull(orders.getConsignee())) {
-            log.warn(orders.toString());
-            throw new ObjectNullException(MessageConstant.ORDER_STATUS_ERROR + ":订单信息为空");
-        }
-    }
 
     /**
      * 用户支付
