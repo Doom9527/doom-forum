@@ -1,9 +1,9 @@
 sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
-    port: 3306
+    host: 111.230.69.151
+    port: 5556
     database: sg_security
     username: root
-    password: GAM.10188
+    password: 123456
 

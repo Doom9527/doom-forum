@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
 @Component
@@ -233,5 +235,33 @@ public class RedisCache
     public Collection<String> keys(final String pattern)
     {
         return redisTemplate.keys(pattern);
+    }
+
+
+    /**
+     * 缓存Long数据
+     *
+     * @param key 缓存的键值
+     * @param dataList1 待缓存的Long数据
+     * @return 缓存的对象
+     */
+    public long setCacheLong(final String key, final Long[] dataList1)
+    {
+        List<Long> dataList = Stream.of(dataList1).collect(Collectors.toList());
+        Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
+        return count == null ? 0 : count;
+    }
+
+    /**
+     * 获得缓存的long对象
+     *
+     * @param key 缓存的键值
+     * @return 缓存键值对应的数据
+     */
+    public Long[] getCacheLong(final String key)
+    {
+        List<Long> range = redisTemplate.opsForList().range(key, 0, -1);
+        Long[] array = range.stream().toArray(Long[]::new);
+        return array;
     }
 }

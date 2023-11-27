@@ -11,7 +11,7 @@ public interface LoginService {
      //* @param userLoginDTO
      * @return
      */
-    UserLoginVO login(UserLoginDTO userLoginDTO);
+    UserLoginVO login(UserLoginDTO userLoginDTO, Object ipAddr);
 
 
     void logout();

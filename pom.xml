@@ -32,6 +32,7 @@
         <poi>3.16</poi>
         <jedis>3.2.0</jedis>
         <mybatis-plus-boot-starter>3.5.3.1</mybatis-plus-boot-starter>
+        <hutool-all>5.8.15</hutool-all>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -137,6 +138,12 @@
                 <version>${jedis}</version>
             </dependency>
 
+            <!-- Util工具包 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

@@ -15,7 +15,7 @@ spring:
 
   redis:
     host: 111.230.69.151
-    port: 6379
+    port: 6666
     password: 123456
     lettuce:
       pool:
@@ -31,6 +31,12 @@ mybatis:
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+
 
 logging:
   level:
