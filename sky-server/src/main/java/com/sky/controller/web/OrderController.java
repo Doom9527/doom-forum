@@ -78,7 +78,7 @@ public class OrderController {
      */
     @DeleteMapping("/cancel")
     @PreAuthorize("hasAuthority('system:operation:user')")
-    public Result<Integer> cancelOrder(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+    public Result<Integer> cancelOrder(@RequestBody @Valid OrdersCancelDTO ordersCancelDTO) {
         return Result.success(ordersService.cancelOrder(ordersCancelDTO));
     }
 
