@@ -10,10 +10,8 @@ import com.sky.vo.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -26,7 +24,7 @@ public class ProductController {
      * 查看所有产品
      * @return
      */
-    @GetMapping("/all")
+    @GetMapping
     @PreAuthorize("hasAuthority('system:operation:user')")
     public Result<PageDTO<ProductVO>> showAllProductByPage(@Valid PageQuery query) {
         PageDTO<ProductVO> productVOs = productService.showAllByPage(query);
@@ -37,7 +35,7 @@ public class ProductController {
      * 程序员查看所有产品，包括删除的
      * @return
      */
-    @GetMapping("/page2")
+    @GetMapping("/admin")
     @PreAuthorize("hasAuthority('system:operation:coder')")
     public Result<PageDTO<ProductVO>> showAllProductAdminByPage(PageQuery query) {
         PageDTO<ProductVO> productVOs = productService.showAllAdminByPage(query);
@@ -49,7 +47,7 @@ public class ProductController {
      * @param id
      * @return
      */
-    @GetMapping("/one/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('system:operation:user')")
     public Result<ProductVO> showOneProductByID(@PathVariable Long id) {
         ProductVO productVO = productService.showOneByID(id);
@@ -61,7 +59,7 @@ public class ProductController {
      * @param id
      * @return
      */
-    @GetMapping("/oneAdmin/{id}")
+    @GetMapping("/admin/{id}")
     @PreAuthorize("hasAuthority('system:operation:coder')")
     public Result<ProductVO> showOneProductByIDAdmin(@PathVariable Long id) {
         ProductVO productVO = productService.showOneByIDAdmin(id);
@@ -74,7 +72,7 @@ public class ProductController {
      * @param request
      * @return
      */
-    @PostMapping("/add")
+    @PostMapping
     @PreAuthorize("hasAuthority('system:operation:coder')")
     public Result<Integer> addProduct(@RequestBody ProductDTO productDTO, HttpServletRequest request) {
         String token = request.getHeader("token");
@@ -115,7 +113,7 @@ public class ProductController {
      */
     @PutMapping("/recover/{ids}")
     @PreAuthorize("hasAuthority('system:operation:coder')")
-    public Result<Integer> recoverByIDs(@PathVariable Long[] ids , HttpServletRequest request){
+    public Result<Integer> recoverProductByIDs(@PathVariable Long[] ids , HttpServletRequest request){
         String token = request.getHeader("token");
         return Result.success(productService.recoverByIDS(ids, token));
     }
