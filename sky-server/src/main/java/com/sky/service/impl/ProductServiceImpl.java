@@ -1,15 +1,19 @@
 package com.sky.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
+import com.sky.dto.PageDTO;
 import com.sky.dto.ProductDTO;
 import com.sky.entity.Product;
 import com.sky.exception.GoodsNullException;
 import com.sky.exception.ObjectNullException;
 import com.sky.exception.RepeatException;
 import com.sky.mapper.ProductMapper;
+import com.sky.result.PageQuery;
 import com.sky.service.ProductService;
 import com.sky.vo.ProductVO;
 import lombok.extern.slf4j.Slf4j;
@@ -28,35 +32,33 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     /**
-     * 查看所有产品
+     * 查看所有商品
      * @return
      */
     @Override
-    public List<ProductVO> showAll() {
+    public PageDTO<ProductVO> showAllByPage(PageQuery query) {
+        // 1.构造条件
+        Page<Product> page = query.toMpPageDefaultSortByCreateTimeDesc();
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Product::getStatus,Product.ALIVE);
-        List<Product> products = baseMapper.selectList(wrapper);
-        List<ProductVO> productVOS = products.stream().map(product -> {
-            ProductVO vo = new ProductVO();
-            BeanUtils.copyProperties(product, vo);
-            return vo;
-        }).collect(Collectors.toList());
-        return productVOS;
+        wrapper.eq(Product::getStatus, Product.ALIVE);
+        // 2.查询
+        page(page, wrapper);
+        // 3.封装返回
+        return PageDTO.of(page, ProductVO.class);
     }
 
     /**
-     * 管理员查看所有产品,包括已被删除的
+     * 管理员查看所有商品,包括已被删除的
      * @return
      */
     @Override
-    public List<ProductVO> showAllAdmin() {
-        List<Product> products = baseMapper.selectList(null);
-        List<ProductVO> productVOS = products.stream().map(product -> {
-            ProductVO vo = new ProductVO();
-            BeanUtils.copyProperties(product, vo);
-            return vo;
-        }).collect(Collectors.toList());
-        return productVOS;
+    public PageDTO<ProductVO> showAllAdminByPage(PageQuery query) {
+        // 1.构造条件
+        Page<Product> page = query.toMpPageDefaultSortByCreateTimeDesc();
+        // 2.查询
+        page(page);
+        // 3.封装返回
+        return PageDTO.of(page, ProductVO.class);
     }
 
     /**
@@ -121,7 +123,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public int changeProduct(Product product, String token) {
         LambdaUpdateWrapper<Product> wrapper = new LambdaUpdateWrapper<>();
 
-        if (StringUtils.hasText(product.getName())) {
+        if (!StrUtil.isBlank(product.getName())) {
             wrapper.set(Product::getName, product.getName());
         }
 
@@ -129,7 +131,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             wrapper.set(Product::getPrice, product.getPrice());
         }
 
-        if (StringUtils.hasText(product.getDescription())) {
+        if (!StrUtil.isBlank(product.getDescription())) {
             wrapper.set(Product::getDescription, product.getDescription());
         }
 
@@ -242,6 +244,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             baseMapper.update(null, wrapper);
         }
     }
-
 
 }

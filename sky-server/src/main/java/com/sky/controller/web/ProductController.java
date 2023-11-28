@@ -1,7 +1,9 @@
 package com.sky.controller.web;
 
+import com.sky.dto.PageDTO;
 import com.sky.dto.ProductDTO;
 import com.sky.entity.Product;
+import com.sky.result.PageQuery;
 import com.sky.result.Result;
 import com.sky.service.ProductService;
 import com.sky.vo.ProductVO;
@@ -10,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,8 +28,8 @@ public class ProductController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('system:operation:user')")
-    public Result<List<ProductVO>> showAllProduct() {
-        List<ProductVO> productVOs = productService.showAll();
+    public Result<PageDTO<ProductVO>> showAllProductByPage(@Valid PageQuery query) {
+        PageDTO<ProductVO> productVOs = productService.showAllByPage(query);
         return Result.success(productVOs);
     }
 
@@ -34,10 +37,10 @@ public class ProductController {
      * 程序员查看所有产品，包括删除的
      * @return
      */
-    @GetMapping("/allAdmin")
+    @GetMapping("/page2")
     @PreAuthorize("hasAuthority('system:operation:coder')")
-    public Result<List<ProductVO>> showAllProductAdmin() {
-        List<ProductVO> productVOs = productService.showAllAdmin();
+    public Result<PageDTO<ProductVO>> showAllProductAdminByPage(PageQuery query) {
+        PageDTO<ProductVO> productVOs = productService.showAllAdminByPage(query);
         return Result.success(productVOs);
     }
 
