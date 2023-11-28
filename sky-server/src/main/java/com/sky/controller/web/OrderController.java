@@ -2,6 +2,8 @@ package com.sky.controller.web;
 
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.PageDTO;
+import com.sky.result.PageQuery;
 import com.sky.result.Result;
 import com.sky.service.OrdersService;
 import com.sky.vo.OrdersVO;
@@ -28,10 +30,10 @@ public class OrderController {
      * 查看所有订单
      * @return
      */
-    @GetMapping("/showAll")
+    @GetMapping
     @PreAuthorize("hasAuthority('system:operation:user')")
-    public Result<List<OrdersVO>> showAllOrders() {
-        List<OrdersVO> ordersVOS = ordersService.selectAll();
+    public Result<PageDTO<OrdersVO>> showAllOrders(@Valid PageQuery query) {
+        PageDTO<OrdersVO> ordersVOS = ordersService.selectAll(query);
         return Result.success(ordersVOS);
     }
 
@@ -40,7 +42,7 @@ public class OrderController {
      * @param id
      * @return
      */
-    @GetMapping("/showOne/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('system:operation:user')")
     public Result<OrdersVO> showOne(@PathVariable Long id) {
         return Result.success(ordersService.selectByID(id));
@@ -52,7 +54,7 @@ public class OrderController {
      * @param request
      * @return
      */
-    @PostMapping("/place")
+    @PostMapping
     @PreAuthorize("hasAuthority('system:operation:user')")
     public Result<OrdersVO> placeNewOrder(@RequestBody @Valid OrdersDTO ordersDTO, HttpServletRequest request){
         String token = request.getHeader("token");
@@ -65,9 +67,9 @@ public class OrderController {
      * @param request
      * @return
      */
-    @PutMapping("/{number}")
+    @PutMapping("/pay/{number}")
     @PreAuthorize("hasAuthority('system:operation:user')")
-    public Result<Integer> payOrder(@PathVariable String number, HttpServletRequest request) {
+    public Result<Integer> payOrder(@PathVariable String number) {
         return Result.success(ordersService.payOrder(number));
     }
 

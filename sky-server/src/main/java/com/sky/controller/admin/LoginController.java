@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 
 @Slf4j
-@RestController
+@RestController("/user")
 public class LoginController {
 
     @Autowired
@@ -28,21 +29,21 @@ public class LoginController {
     @Autowired
     private RedisCache redisCache;
 
-    @PostMapping("/user/login")
-    public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request){
+    @PostMapping
+    public Result<UserLoginVO> login(@Valid @RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request){
         //User user = loginService.SearchLoginUser(userLoginDTO);
         String ipAddr = IPUtils.getIpAddr(request);
         UserLoginVO userLoginVO = loginService.login(userLoginDTO, ipAddr);
         return Result.success(userLoginVO);
     }
 
-    @RequestMapping("/user/logout")
+    @RequestMapping("/logout")
     public Result<String> logout(){
         loginService.logout();
         return Result.success("退出成功");
     }
 
-    @RequestMapping("/user/getCaptcha")
+    @RequestMapping("/getCaptcha")
     public Result<String> getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = CaptchaUtils.setCaptcha(response);
         String ipAddr = IPUtils.getIpAddr(request);

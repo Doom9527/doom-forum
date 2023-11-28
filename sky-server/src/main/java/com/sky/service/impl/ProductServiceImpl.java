@@ -20,13 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -229,6 +226,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     }
 
+    /**
+     * 商品库存恢复
+     * @param ids
+     */
     @Override
     public void productGoodsRecovery(Long[] ids) {
         List<Long> selectIDs = Arrays.asList(ids);

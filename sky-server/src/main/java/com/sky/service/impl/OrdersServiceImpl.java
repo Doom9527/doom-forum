@@ -2,14 +2,16 @@ package com.sky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.PageDTO;
 import com.sky.entity.Orders;
-import com.sky.exception.ObjectNullException;
 import com.sky.exception.RepeatException;
 import com.sky.mapper.OrdersMapper;
+import com.sky.result.PageQuery;
 import com.sky.service.OrdersService;
 import com.sky.service.ProductService;
 import com.sky.utils.JwtUtils;
@@ -46,14 +48,10 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
      * @return
      */
     @Override
-    public List<OrdersVO> selectAll() {
-        List<Orders> ordersList = baseMapper.selectList(null);
-        List<OrdersVO> ordersVOList = ordersList.stream().map(orders -> {
-            OrdersVO ordersVO = new OrdersVO();
-            BeanUtils.copyProperties(orders, ordersVO);
-            return ordersVO;
-        }).collect(Collectors.toList());
-        return ordersVOList;
+    public PageDTO<OrdersVO> selectAll(PageQuery query) {
+        Page<Orders> page = query.toMpPageDefaultSortByCreateTimeDesc();
+        page(page);
+        return PageDTO.of(page, OrdersVO.class);
     }
 
     /**

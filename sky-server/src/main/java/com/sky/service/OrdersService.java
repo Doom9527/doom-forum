@@ -3,13 +3,15 @@ package com.sky.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.PageDTO;
 import com.sky.entity.Orders;
+import com.sky.result.PageQuery;
 import com.sky.vo.OrdersVO;
 
 import java.util.List;
 
 public interface OrdersService extends IService<Orders> {
-    List<OrdersVO> selectAll();
+    PageDTO<OrdersVO> selectAll(PageQuery query);
 
     OrdersVO selectByID(Long id);
 
