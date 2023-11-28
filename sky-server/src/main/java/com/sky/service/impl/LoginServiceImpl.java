@@ -39,6 +39,7 @@ public class LoginServiceImpl implements LoginService {
         if (CaptchaUtils.verifyCaptcha(userLoginDTO.getCode(), ipAddr)) {
             throw new LoginFailedException(MessageConstant.VERIFY_CODE_ERROR);
         }
+        redisCache.deleteObject((String) ipAddr);
 
         //对象拷贝
         User user = new User();
