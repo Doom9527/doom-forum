@@ -7,6 +7,7 @@ import com.sky.entity.OrderPlaceMQInfo;
 import com.sky.service.OrdersService;
 import com.sky.utils.RedisCache;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderPayListener {
@@ -25,6 +27,10 @@ public class OrderPayListener {
     @Autowired
     private OrdersService ordersService;
 
+    /**
+     * 支付成功删除redis缓存
+     * @param payload
+     */
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = RabbitMQConstant.ORDER_PAY_QUEUE, durable = RabbitMQConstant.DURABLE_TRUE),
             exchange = @Exchange(name = RabbitMQConstant.ORDER_PAY_EXCHANGE, type = ExchangeTypes.TOPIC),
@@ -34,6 +40,7 @@ public class OrderPayListener {
         OrderPayMQInfo orderPayMQInfo = getOrderPayMQInfo(payload);
         List<String> redisKey = orderPayMQInfo.getRedisKey();
         ordersService.deleteOrderNumberRedisCache(redisKey);
+        log.error("删除redis缓存成功: " + redisKey.toString());
     }
 
     private static OrderPayMQInfo getOrderPayMQInfo(String payload) {

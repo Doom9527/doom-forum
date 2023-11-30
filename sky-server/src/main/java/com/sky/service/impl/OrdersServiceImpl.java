@@ -10,6 +10,7 @@ import com.sky.constant.RabbitMQConstant;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.PageDTO;
+import com.sky.entity.OrderCanceMQInfo;
 import com.sky.entity.OrderPayMQInfo;
 import com.sky.entity.OrderPlaceMQInfo;
 import com.sky.entity.Orders;
@@ -163,6 +164,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
         redisCache.setCacheLong(redisKey.get(0), ids);
         redisCache.expire(redisKey.get(0),1800);
         redisCache.setCacheLong(redisKey.get(1), ids);
+        //多五秒
         redisCache.expire(redisKey.get(1),1805);
     }
 
@@ -220,13 +222,18 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
     @Transactional
     @Override
     public int cancelOrder(OrdersCancelDTO ordersCancelDTO) {
-        //TODO 还原库存
-        Long[] cacheLong = redisCache.getCacheLong(ordersCancelDTO.getNumber());
-        log.error(Arrays.toString(cacheLong));
-        productService.productGoodsRecovery(cacheLong);
-
-        //删除Redis中的缓存
-        redisCache.deleteObject(ordersCancelDTO.getNumber());
+        //TODO 发布通知，还原库存并删除redis缓存
+        List<String> redisKey = new ArrayList<>();
+        redisKey.add(ordersCancelDTO.getNumber());
+        redisKey.add("R"+ordersCancelDTO.getNumber());
+        Long[] ids = redisCache.getCacheLong("R"+ordersCancelDTO.getNumber());
+        OrderCanceMQInfo orderCanceMQInfo = OrderCanceMQInfo.builder()
+                        .redisKey(redisKey)
+                        .ids(ids)
+                        .build();
+        String JSON = JSONUtil.toJsonStr(orderCanceMQInfo);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.ORDER_CANCEL_EXCHANGE, "cancel", JSON);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.ORDER_CANCEL_EXCHANGE, "cancel.manual", JSON);
 
         //更新订单状态
         LambdaUpdateWrapper<Orders> wrapper = new LambdaUpdateWrapper<>();
@@ -239,6 +246,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
 
     }
 
+
+
     /**
      * 过期超时取消订单，此被RedisListner调用
      * @param number
@@ -246,10 +255,13 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
     @Transactional
     @Override
     public void timeOutCancelOrder(String number) {
-        //TODO 此次取出克隆的Redis数据
-        String[] split = number.split("-");
-        Long[] cacheLong = redisCache.getCacheLong("ROD"+"-"+split[1]);
-        productService.productGoodsRecovery(cacheLong);
+        //TODO 发布通知，还原库存
+        Long[] ids= redisCache.getCacheLong("R"+number);
+        OrderCanceMQInfo orderCanceMQInfo = OrderCanceMQInfo.builder()
+                .ids(ids)
+                .build();
+        String JSON = JSONUtil.toJsonStr(orderCanceMQInfo);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.ORDER_CANCEL_EXCHANGE, RabbitMQConstant.ORDER_CANCEL_KEY, JSON);
 
         //更新订单状态
         LambdaUpdateWrapper<Orders> wrapper = new LambdaUpdateWrapper<>();
