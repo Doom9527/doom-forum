@@ -24,6 +24,13 @@ spring:
         min-idle: 0
         max-wait: 100ms
 
+  rabbitmq:
+    host: 111.230.69.151 # 你的虚拟机IP
+    port: 5672 # 端口
+    virtual-host: /javaCoreHomework # 虚拟主机
+    username: redo # 用户名
+    password: 123 # 密码
+
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml

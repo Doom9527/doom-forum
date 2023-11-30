@@ -8,10 +8,7 @@ import com.sky.utils.RedisCache;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +17,8 @@ import java.io.IOException;
 
 
 @Slf4j
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 public class LoginController {
 
     @Autowired
@@ -29,7 +27,7 @@ public class LoginController {
     @Autowired
     private RedisCache redisCache;
 
-    @PostMapping
+    @PostMapping("/login")
     public Result<UserLoginVO> login(@Valid @RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request){
         //User user = loginService.SearchLoginUser(userLoginDTO);
         String ipAddr = IPUtils.getIpAddr(request);

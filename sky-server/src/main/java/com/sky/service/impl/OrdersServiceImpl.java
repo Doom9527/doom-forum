@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,6 +9,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.PageDTO;
+import com.sky.entity.OrderMQInfo;
 import com.sky.entity.Orders;
 import com.sky.exception.RepeatException;
 import com.sky.mapper.OrdersMapper;
@@ -18,6 +20,7 @@ import com.sky.utils.JwtUtils;
 import com.sky.utils.RedisCache;
 import com.sky.vo.OrdersVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -42,6 +42,9 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 查看所有订单
@@ -94,6 +97,10 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
         String number = "OD-" + userId + "CS" + date1 + id1;
         String rnumber = "ROD-" + userId + "CS" + date1 + id1;
 
+        List<String> redisKey = new ArrayList<>();
+        redisKey.add(number);
+        redisKey.add(rnumber);
+
         //从Redis缓存中取出订单查询是否重复下单
         Object val = redisCache.getCacheObject(number);
         if (!Objects.isNull(val)){
@@ -107,8 +114,9 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
             }
         }
 
+        //TODO e
         //将该商品库存 - 1,顺便判断库存余量
-        productService.productGoodsMinus(ids);
+        //productService.productGoodsMinus(ids);
 
         //计算订单总支付金额
         AtomicInteger totalPrice = productService.countTotalPriceByIDs(ids);
@@ -135,14 +143,30 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
 
         //TODO 存入Redis缓存，持续时间为30min
         //TODO 连存两条Redis数据，第二条比第一条存在时间长5秒，供监听Redis过期时使用
-        redisCache.setCacheLong(number,ids);
-        redisCache.expire(number,1800);
-        redisCache.setCacheLong("R"+number,ids);
-        redisCache.expire(rnumber,1805);
+//        redisCache.setCacheLong(number,ids);
+//        redisCache.expire(number,1800);
+//        redisCache.setCacheLong(rnumber,ids);
+//        redisCache.expire(rnumber,1805);
+
+        //发布mq通知，判断库存余量后减少商品库存，并将订单存入redis缓存持续30min
+        OrderMQInfo orderMQInfo = OrderMQInfo.builder()
+                        .arr(redisKey)
+                        .ids(ids)
+                        .build();
+        String orderMQInfoToJSON = JSONUtil.toJsonStr(orderMQInfo);
+        rabbitTemplate.convertAndSend("place.topic", "place.success", orderMQInfoToJSON);
 
         OrdersVO ordersVO = new OrdersVO();
         BeanUtils.copyProperties(orders,ordersVO);
         return ordersVO;
+    }
+
+    @Override
+    public void setOrderNumberRedisCache(List<String> redisKey, Long[] ids) {
+        redisCache.setCacheLong(redisKey.get(0), ids);
+        redisCache.expire(redisKey.get(0),1800);
+        redisCache.setCacheLong(redisKey.get(1), ids);
+        redisCache.expire(redisKey.get(1),1805);
     }
 
 

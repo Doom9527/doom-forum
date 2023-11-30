@@ -17,6 +17,8 @@ public interface OrdersService extends IService<Orders> {
 
     OrdersVO placeNewOrder(OrdersDTO ordersDTO, String token);
 
+    void setOrderNumberRedisCache (List<String> redisKey, Long[] ids);
+
     int payOrder(String number);
 
     int cancelOrder(OrdersCancelDTO ordersCancelDTO);
