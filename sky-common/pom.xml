@@ -30,25 +30,25 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>
-        <!--支持配置属性类，yml文件中可以提示配置项-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
-        <!--微信支付-->
-        <dependency>
-            <groupId>com.github.wechatpay-apiv3</groupId>
-            <artifactId>wechatpay-apache-httpclient</artifactId>
-        </dependency>
+<!--        &lt;!&ndash;支持配置属性类，yml文件中可以提示配置项&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.aliyun.oss</groupId>-->
+<!--            <artifactId>aliyun-sdk-oss</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>javax.xml.bind</groupId>-->
+<!--            <artifactId>jaxb-api</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;微信支付&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.wechatpay-apiv3</groupId>-->
+<!--            <artifactId>wechatpay-apache-httpclient</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.auth0</groupId>

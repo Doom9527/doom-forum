@@ -78,17 +78,17 @@
                 <version>${knife4j}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${aspectj}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.aspectj</groupId>-->
+<!--                <artifactId>aspectjrt</artifactId>-->
+<!--                <version>${aspectj}</version>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${aspectj}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.aspectj</groupId>-->
+<!--                <artifactId>aspectjweaver</artifactId>-->
+<!--                <version>${aspectj}</version>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -96,35 +96,35 @@
                 <version>${jjwt}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.aliyun.oss</groupId>
-                <artifactId>aliyun-sdk-oss</artifactId>
-                <version>${aliyun.sdk.oss}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.aliyun.oss</groupId>-->
+<!--                <artifactId>aliyun-sdk-oss</artifactId>-->
+<!--                <version>${aliyun.sdk.oss}</version>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${jaxb-api}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>javax.xml.bind</groupId>-->
+<!--                <artifactId>jaxb-api</artifactId>-->
+<!--                <version>${jaxb-api}</version>-->
+<!--            </dependency>-->
 
-            <!-- poi -->
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>${poi}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi}</version>
-            </dependency>
-            <!--微信支付-->
-            <dependency>
-                <groupId>com.github.wechatpay-apiv3</groupId>
-                <artifactId>wechatpay-apache-httpclient</artifactId>
-                <version>0.4.8</version>
-            </dependency>
+<!--            &lt;!&ndash; poi &ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.poi</groupId>-->
+<!--                <artifactId>poi</artifactId>-->
+<!--                <version>${poi}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.poi</groupId>-->
+<!--                <artifactId>poi-ooxml</artifactId>-->
+<!--                <version>${poi}</version>-->
+<!--            </dependency>-->
+<!--            &lt;!&ndash;微信支付&ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>com.github.wechatpay-apiv3</groupId>-->
+<!--                <artifactId>wechatpay-apache-httpclient</artifactId>-->
+<!--                <version>0.4.8</version>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>com.baomidou</groupId>
