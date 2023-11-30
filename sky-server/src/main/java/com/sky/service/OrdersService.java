@@ -19,6 +19,8 @@ public interface OrdersService extends IService<Orders> {
 
     void setOrderNumberRedisCache (List<String> redisKey, Long[] ids);
 
+    void deleteOrderNumberRedisCache(List<String> redisKey);
+
     int payOrder(String number);
 
     int cancelOrder(OrdersCancelDTO ordersCancelDTO);

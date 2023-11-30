@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderMQInfo {
-    private Long[] ids;
-    private List<String> arr;
+public class OrderPayMQInfo {
+    private List<String> redisKey;
 }

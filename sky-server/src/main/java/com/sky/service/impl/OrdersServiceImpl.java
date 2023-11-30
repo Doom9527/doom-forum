@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.RabbitMQConstant;
 import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.PageDTO;
-import com.sky.entity.OrderMQInfo;
+import com.sky.entity.OrderPayMQInfo;
+import com.sky.entity.OrderPlaceMQInfo;
 import com.sky.entity.Orders;
 import com.sky.exception.RepeatException;
 import com.sky.mapper.OrdersMapper;
@@ -31,7 +33,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -114,9 +115,15 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
             }
         }
 
-        //TODO e
-        //将该商品库存 - 1,顺便判断库存余量
-        //productService.productGoodsMinus(ids);
+        //TODO mq发布通知，判断库存余量后减少商品库存，并将订单存入redis缓存持续30min
+        //TODO 存入Redis缓存，持续时间为30min
+        //TODO 连存两条Redis数据，第二条比第一条存在时间长5秒，供监听Redis过期时使用
+        OrderPlaceMQInfo orderPlaceMQInfo = OrderPlaceMQInfo.builder()
+                .arr(redisKey)
+                .ids(ids)
+                .build();
+        String orderMQInfoToJSON = JSONUtil.toJsonStr(orderPlaceMQInfo);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.ORDER_PLACE_EXCHANGE, RabbitMQConstant.ORDER_PLACE_KEY, orderMQInfoToJSON);
 
         //计算订单总支付金额
         AtomicInteger totalPrice = productService.countTotalPriceByIDs(ids);
@@ -141,32 +148,32 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
                 .consignee(ordersDTO.getConsignee()).build();
         baseMapper.insert(orders);
 
-        //TODO 存入Redis缓存，持续时间为30min
-        //TODO 连存两条Redis数据，第二条比第一条存在时间长5秒，供监听Redis过期时使用
-//        redisCache.setCacheLong(number,ids);
-//        redisCache.expire(number,1800);
-//        redisCache.setCacheLong(rnumber,ids);
-//        redisCache.expire(rnumber,1805);
-
-        //发布mq通知，判断库存余量后减少商品库存，并将订单存入redis缓存持续30min
-        OrderMQInfo orderMQInfo = OrderMQInfo.builder()
-                        .arr(redisKey)
-                        .ids(ids)
-                        .build();
-        String orderMQInfoToJSON = JSONUtil.toJsonStr(orderMQInfo);
-        rabbitTemplate.convertAndSend("place.topic", "place.success", orderMQInfoToJSON);
-
         OrdersVO ordersVO = new OrdersVO();
         BeanUtils.copyProperties(orders,ordersVO);
         return ordersVO;
     }
 
+    /**
+     * 设置双Redis缓存
+     * @param redisKey
+     * @param ids
+     */
     @Override
     public void setOrderNumberRedisCache(List<String> redisKey, Long[] ids) {
         redisCache.setCacheLong(redisKey.get(0), ids);
         redisCache.expire(redisKey.get(0),1800);
         redisCache.setCacheLong(redisKey.get(1), ids);
         redisCache.expire(redisKey.get(1),1805);
+    }
+
+    /**
+     * 删除双Redis缓存
+     * @param redisKey
+     */
+    @Override
+    public void deleteOrderNumberRedisCache(List<String> redisKey) {
+        redisCache.deleteObject(redisKey.get(0));
+        redisCache.deleteObject(redisKey.get(1));
     }
 
 
@@ -185,8 +192,15 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
             throw new RepeatException(MessageConstant.HAS_BEEN_PAID);
         }
 
-        //删除Redis中的缓存
-        redisCache.deleteObject(number);
+        //TODO 发布支付成功通知，删除Redis中的缓存
+        List<String> redisKey = new ArrayList<>();
+        redisKey.add(number);
+        redisKey.add("R"+number);
+        OrderPayMQInfo orderPayMQInfo = OrderPayMQInfo.builder()
+                        .redisKey(redisKey)
+                        .build();
+        String JSON = JSONUtil.toJsonStr(orderPayMQInfo);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.ORDER_PAY_EXCHANGE, RabbitMQConstant.ORDER_PAY_KEY, JSON);
 
         //更新数据库
         LambdaUpdateWrapper<Orders> wrapper1 = new LambdaUpdateWrapper<>();
