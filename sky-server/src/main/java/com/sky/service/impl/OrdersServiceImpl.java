@@ -82,7 +82,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
     @Override
     public OrdersVO placeNewOrder(OrdersDTO ordersDTO, String token) {
 
-        //创建订单号：日期+用户id+下单商品id
+        //创建订单号：订单标识+用户id +日期+下单商品id
         LocalDate date = LocalDate.now();
         int year = date.getYear();
         int month = date.getMonthValue();

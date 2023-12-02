@@ -64,7 +64,6 @@ public class OrderController {
     /**
      * 支付
      * @param number
-     * @param request
      * @return
      */
     @PutMapping("/pay/{number}")

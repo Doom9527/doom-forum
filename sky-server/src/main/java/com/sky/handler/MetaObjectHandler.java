@@ -1,5 +1,6 @@
 package com.sky.handler;
 
+import com.sky.constant.AutoFillConstant;
 import com.sky.utils.BaseContext;
 import com.sky.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +18,11 @@ public class MetaObjectHandler implements com.baomidou.mybatisplus.core.handlers
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        metaObject.setValue("createTime", LocalDateTime.now());
-        metaObject.setValue("updateTime", LocalDateTime.now());
+        metaObject.setValue(AutoFillConstant.CREATE_TIME, LocalDateTime.now());
+        metaObject.setValue(AutoFillConstant.UPDATE_TIME, LocalDateTime.now());
         Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
-        metaObject.setValue("createUser", id);
-        metaObject.setValue("updateUser", id);
+        metaObject.setValue(AutoFillConstant.CREATE_USER, id);
+        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
     }
 
     /**
@@ -30,8 +31,8 @@ public class MetaObjectHandler implements com.baomidou.mybatisplus.core.handlers
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        metaObject.setValue("updateTime", LocalDateTime.now());
+        metaObject.setValue(AutoFillConstant.UPDATE_TIME, LocalDateTime.now());
         Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
-        metaObject.setValue("updateUser", id);
+        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
     }
 }
