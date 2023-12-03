@@ -54,7 +54,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper , Orders> implem
      */
     @Override
     public PageDTO<OrdersVO> selectAll(PageQuery query) {
-        Page<Orders> page = query.toMpPageDefaultSortByCreateTimeDesc();
+        Page<Orders> page = query.toMpPageDefaultSortByOrderTimeDesc();
         page(page);
         return PageDTO.of(page, OrdersVO.class);
     }

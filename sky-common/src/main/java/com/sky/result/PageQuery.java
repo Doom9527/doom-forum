@@ -42,6 +42,10 @@ public class PageQuery {
         return toMpPage("create_time", false);
     }
 
+    public <T> Page<T> toMpPageDefaultSortByOrderTimeDesc() {
+        return toMpPage("order_time", false);
+    }
+
     public <T> Page<T> toMpPageDefaultSortByUpdateTimeDesc() {
         return toMpPage("update_time", false);
     }
