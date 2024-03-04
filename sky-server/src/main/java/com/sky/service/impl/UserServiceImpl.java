@@ -40,5 +40,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         baseMapper.relateUserAndProblem(user.getId(), problem);
     }
 
+    @Override
+    public User getUserById(Long id) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId, id);
+        return baseMapper.selectOne(wrapper);
+    }
+
 
 }
