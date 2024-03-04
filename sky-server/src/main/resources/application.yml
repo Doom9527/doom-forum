@@ -53,6 +53,7 @@ logging:
         service: info
         controller: info
 
+
 #sky:
 #  jwt:
 #    # 设置jwt签名加密时使用的秘钥
@@ -61,3 +62,14 @@ logging:
 #    admin-ttl: 7200000
 #    # 设置前端传递过来的令牌名称
 #    admin-token-name: token
+swagger:
+  enabled: true
+
+# 集成阿里云OSS
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      keyid: LTAI5tJcoYMsoFba4oLFCt9d
+      keysecret: hxRVKqn8gc8sCBHkbkeH2HgS2HHreB
+      bucketname: redo-mall

@@ -38,6 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/register").anonymous()
                 .antMatchers("/user/getCaptcha").anonymous()
+                .antMatchers("/swagger-ui/**").anonymous()
+                .antMatchers("/v3/api-docs/**","/v2/api-docs/**").anonymous()
+                .antMatchers("/doc.html").anonymous()
+                .antMatchers("/webjars/**").anonymous()
+                .antMatchers("/swagger-resources").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 

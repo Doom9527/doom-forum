@@ -9,4 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper extends BaseMapper<User> {
     @Insert("INSERT INTO sys_user_role (user_id, role_id) VALUES (#{id}, 3)")
     void relateUserAndRole (Long id);
+
+    @Insert("INSERT INTO sys_user_problem (user_id, problem_id) values (#{userId}, #{problemId})")
+    void relateUserAndProblem(Long userId, Long problemId);
 }

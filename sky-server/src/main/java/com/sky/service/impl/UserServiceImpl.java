@@ -33,11 +33,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public void InsertUser(User user) {
+    public void InsertUser(User user, Long problem) {
         baseMapper.insert(user);
         User user1 = getUserByUserName(user.getUserName());
         baseMapper.relateUserAndRole(user1.getId());
-
+        baseMapper.relateUserAndProblem(user.getId(), problem);
     }
 
 

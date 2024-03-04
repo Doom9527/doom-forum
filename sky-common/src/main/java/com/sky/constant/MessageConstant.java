@@ -10,6 +10,8 @@ public class MessageConstant {
     public static final String USER_HAS_BEEN_REGISTERED = "该用户已注册";
     public static final String USER_NOT_LOGIN = "用户未登录";
     public static final String USERNAME_IS_NULL = "用户名为空";
+    public static final String PROBLEM_IS_NULL = "密保问题为空";
+    public static final String ANSWER_IS_NULL = "密保答案为空";
     public static final String PASSWORD_IS_NULL = "密码为空";
     public static final String NICKNAME_IS_NULL = "昵称为空";
     public static final String PHONENUMBER_IS_NULL = "手机号为空";

@@ -61,7 +61,8 @@ public class LoginServiceImpl implements LoginService {
         redisCache.setCacheObject("login:"+userId,loginUser);
         //返回UserLoginDTO
         UserLoginVO userLoginVO = UserLoginVO.builder()
-                .id(user.getId())
+                .id(Long.valueOf(userId))
+                .userName(loginUser.getUsername())
                 .token(token)
                 .build();
         return userLoginVO;
