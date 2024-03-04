@@ -19,28 +19,35 @@ import java.io.Serializable;
 @Builder
 public class UserRegisterDTO implements Serializable {
     @NotBlank(message = "用户名为空")
-    @ApiModelProperty("用户名")
+    @ApiModelProperty(value = "用户名", required = true)
     private String userName;
 
     @NotBlank(message = "密码为空")
-    @ApiModelProperty("密码")
+    @ApiModelProperty(value = "密码", required = true)
     private String password;
 
-    @NotBlank(message = "昵称为空")
-    @ApiModelProperty("昵称")
-    private String nickName;
+//    @NotBlank(message = "昵称为空")
+//    @ApiModelProperty("昵称")
+//    private String nickName;
+//
+//    @NotBlank(message = "手机号为空")
+//    @ApiModelProperty("手机号")
+//    private String phonenumber;
+//
+//    @NotBlank(message = "邮箱为空")
+//    @Email(message = "邮箱格式不正确")
+//    @ApiModelProperty("邮箱号")
+//    private String email;
+//
+//    @NotNull(message = "性别为空")
+//    @ApiModelProperty("性别")
+//    private Integer sex;
 
-    @NotBlank(message = "手机号为空")
-    @ApiModelProperty("手机号")
-    private String phonenumber;
+    @NotNull(message = "密保问题为空")
+    @ApiModelProperty(value = "密保问题", required = true)
+    private Long securityProblem;
 
-    @NotBlank(message = "邮箱为空")
-    @Email(message = "邮箱格式不正确")
-    @ApiModelProperty("邮箱号")
-    private String email;
-
-    @NotNull(message = "性别为空")
-    @ApiModelProperty("性别")
-    private Integer sex;
-
+    @NotBlank(message = "密保答案为空")
+    @ApiModelProperty(value = "密保答案", required = true)
+    private String answer;
 }

@@ -23,5 +23,5 @@ public interface UserService extends IService<User> {
     /**
      * 注册，添加用户
      */
-    void InsertUser(User user);
+    void InsertUser(User user, Long id);
 }

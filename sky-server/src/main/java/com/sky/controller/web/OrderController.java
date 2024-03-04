@@ -31,7 +31,7 @@ public class OrderController {
      * @return
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<PageDTO<OrdersVO>> showAllOrders(@Valid PageQuery query) {
         PageDTO<OrdersVO> ordersVOS = ordersService.selectAll(query);
         return Result.success(ordersVOS);
@@ -43,7 +43,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<OrdersVO> showOne(@PathVariable Long id) {
         return Result.success(ordersService.selectByID(id));
     }
@@ -55,7 +55,7 @@ public class OrderController {
      * @return
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<OrdersVO> placeNewOrder(@RequestBody @Valid OrdersDTO ordersDTO, HttpServletRequest request){
         String token = request.getHeader("token");
         return Result.success(ordersService.placeNewOrder(ordersDTO, token));
@@ -67,7 +67,7 @@ public class OrderController {
      * @return
      */
     @PutMapping("/pay/{number}")
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> payOrder(@PathVariable String number) {
         return Result.success(ordersService.payOrder(number));
     }
@@ -78,7 +78,7 @@ public class OrderController {
      * @return
      */
     @DeleteMapping("/cancel")
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> cancelOrder(@RequestBody @Valid OrdersCancelDTO ordersCancelDTO) {
         return Result.success(ordersService.cancelOrder(ordersCancelDTO));
     }

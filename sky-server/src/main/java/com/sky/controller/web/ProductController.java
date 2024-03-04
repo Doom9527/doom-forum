@@ -25,7 +25,7 @@ public class ProductController {
      * @return
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<PageDTO<ProductVO>> showAllProductByPage(@Valid PageQuery query) {
         PageDTO<ProductVO> productVOs = productService.showAllByPage(query);
         return Result.success(productVOs);
@@ -36,7 +36,7 @@ public class ProductController {
      * @return
      */
     @GetMapping("/admin")
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<PageDTO<ProductVO>> showAllProductAdminByPage(PageQuery query) {
         PageDTO<ProductVO> productVOs = productService.showAllAdminByPage(query);
         return Result.success(productVOs);
@@ -48,7 +48,7 @@ public class ProductController {
      * @return
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('system:operation:user')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<ProductVO> showOneProductByID(@PathVariable Long id) {
         ProductVO productVO = productService.showOneByID(id);
         return Result.success(productVO);
@@ -60,7 +60,7 @@ public class ProductController {
      * @return
      */
     @GetMapping("/admin/{id}")
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<ProductVO> showOneProductByIDAdmin(@PathVariable Long id) {
         ProductVO productVO = productService.showOneByIDAdmin(id);
         return Result.success(productVO);
@@ -73,7 +73,7 @@ public class ProductController {
      * @return
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> addProduct(@RequestBody ProductDTO productDTO, HttpServletRequest request) {
         String token = request.getHeader("token");
         return Result.success(productService.addProduct(productDTO, token));
@@ -86,7 +86,7 @@ public class ProductController {
      * @return
      */
     @PutMapping("/change")
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> changeProduct(@RequestBody Product product, HttpServletRequest request) {
         String token = request.getHeader("token");
         return Result.success(productService.changeProduct(product, token));
@@ -99,7 +99,7 @@ public class ProductController {
      * @return
      */
     @DeleteMapping("/delete/{ids}")
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> deleteProductByIDs(@PathVariable Long[] ids , HttpServletRequest request){
         String token = request.getHeader("token");
         return Result.success(productService.deleteByIDs(ids, token));
@@ -112,7 +112,7 @@ public class ProductController {
      * @return
      */
     @PutMapping("/recover/{ids}")
-    @PreAuthorize("hasAuthority('system:operation:coder')")
+    @PreAuthorize("hasAuthority('system:operation:dept')")
     public Result<Integer> recoverProductByIDs(@PathVariable Long[] ids , HttpServletRequest request){
         String token = request.getHeader("token");
         return Result.success(productService.recoverByIDS(ids, token));

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -18,17 +19,22 @@ import java.io.Serializable;
 public class UserLoginDTO implements Serializable {
 
     @NotBlank(message = "用户名为空")
-    @ApiModelProperty("用户名")
+    @ApiModelProperty(value = "用户名", required = true)
     private String userName;
 
     @NotBlank(message = "密码为空")
-    @ApiModelProperty("密码")
+    @ApiModelProperty(value = "密码", required = true)
     private String password;
+
+    @NotNull(message = "用户类型为空")
+    @ApiModelProperty(value = "用户类型: 1用户 2游客 3管理员", required = true)
+    private Character userType;
 
     /**
      * 验证码
      */
     @NotBlank(message = "验证码为空")
+    @ApiModelProperty(value = "验证码", required = true)
     private String code;
 
 }

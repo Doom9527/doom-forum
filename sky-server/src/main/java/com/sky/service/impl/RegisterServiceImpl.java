@@ -12,8 +12,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import java.util.Objects;
 
 @Slf4j
@@ -27,6 +27,7 @@ public class RegisterServiceImpl implements RegisterService {
      * @param userRegisterDTO
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void register(UserRegisterDTO userRegisterDTO) {
 
         //查询该用户是否已经注册
@@ -46,8 +47,8 @@ public class RegisterServiceImpl implements RegisterService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //添加用户
-        userService.InsertUser(user);
+        //添加用户并设置用户类型与密保关联
+        userService.InsertUser(user, userRegisterDTO.getSecurityProblem());
     }
 
     private static void maybeNull(UserRegisterDTO userRegisterDTO) {
@@ -57,14 +58,20 @@ public class RegisterServiceImpl implements RegisterService {
         if (!StringUtils.hasText(userRegisterDTO.getPassword())) {
             throw new RegisterNullException(MessageConstant.PASSWORD_IS_NULL);
         }
-        if (!StringUtils.hasText(userRegisterDTO.getNickName())) {
-            throw new RegisterNullException(MessageConstant.NICKNAME_IS_NULL);
+//        if (!StringUtils.hasText(userRegisterDTO.getNickName())) {
+//            throw new RegisterNullException(MessageConstant.NICKNAME_IS_NULL);
+//        }
+//        if (!StringUtils.hasText(userRegisterDTO.getEmail())) {
+//            throw new RegisterNullException(MessageConstant.EMAIL_IS_NULL);
+//        }
+//        if (!StringUtils.hasText(userRegisterDTO.getPhonenumber())) {
+//            throw new RegisterNullException(MessageConstant.PHONENUMBER_IS_NULL);
+//        }
+        if (!StringUtils.hasText(userRegisterDTO.getAnswer())) {
+            throw new RegisterNullException(MessageConstant.ANSWER_IS_NULL);
         }
-        if (!StringUtils.hasText(userRegisterDTO.getEmail())) {
-            throw new RegisterNullException(MessageConstant.EMAIL_IS_NULL);
-        }
-        if (!StringUtils.hasText(userRegisterDTO.getPhonenumber())) {
-            throw new RegisterNullException(MessageConstant.PHONENUMBER_IS_NULL);
+        if (userRegisterDTO.getSecurityProblem() == null) {
+            throw new RegisterNullException(MessageConstant.PROBLEM_IS_NULL);
         }
     }
 
