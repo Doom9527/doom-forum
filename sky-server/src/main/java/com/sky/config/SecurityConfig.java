@@ -35,14 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 对于登录注册接口 允许匿名访问
-                .antMatchers("/user/login").anonymous()
-                .antMatchers("/user/register").anonymous()
-                .antMatchers("/user/getCaptcha").anonymous()
-                .antMatchers("/swagger-ui/**").anonymous()
-                .antMatchers("/v3/api-docs/**","/v2/api-docs/**").anonymous()
-                .antMatchers("/doc.html").anonymous()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/swagger-resources").anonymous()
+                .antMatchers("/user/login", "/user/register", "/user/getCaptcha", "/user/check2/**", "/user/check2", "/user/modify2").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/api-docs/**","/v2/api-docs/**").permitAll()
+                .antMatchers("/doc.html").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 

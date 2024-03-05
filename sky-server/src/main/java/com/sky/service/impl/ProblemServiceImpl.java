@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.entity.Problem;
 import com.sky.mapper.ProblemMapper;
@@ -30,5 +31,12 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
                     return vo;
                 }).collect(Collectors.toList());
         return vos;
+    }
+
+    @Override
+    public Problem getProblemById(Long id) {
+        LambdaQueryWrapper<Problem> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Problem::getId, id);
+        return baseMapper.selectOne(wrapper);
     }
 }

@@ -1,6 +1,7 @@
 package com.sky.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sky.entity.Problem;
 import com.sky.entity.User;
 
 import java.util.List;
@@ -29,4 +30,26 @@ public interface UserService extends IService<User> {
      * 根据id查询用户
      */
     User getUserById(Long id);
+
+    /**
+     * 根据id查询密保问题
+     * @param id
+     * @return
+     */
+    Problem getProblemByUserId(String id);
+
+    /**
+     * 验证密保问题
+     * @param answer
+     * @return
+     */
+    Boolean checkAnswer(String answer, String userId);
+
+    /**
+     * 修改密码
+     * @param password
+     * @param userId
+     * @return
+     */
+    boolean modifyPassword(String password, String userId);
 }

@@ -24,4 +24,10 @@ public class MessageConstant {
     public static final String HAS_BEEN_PAID = "请勿重复支付";
     public static final String VERIFY_CODE_ERROR = "验证码错误";
     public static final String VERIFY_CODE_TIMEOUT = "验证码过期，请重新获取";
+
+    public static final String MODIFY_REDIS_EXPIRE = "令牌过期，请重新验证密保";
+
+    public static final String USER_IS_NULL = "该用户不存在";
+
+    public static final String PASSWORD_RE_ERROR = "新的密码不能和以前一样";
 }

@@ -12,4 +12,9 @@ public interface ProblemService extends IService<Problem> {
      * @return
      */
     List<ProblemVO> getProblems();
+
+    /**
+     * 根据id获取密保问题
+     */
+    Problem getProblemById(Long id);
 }
