@@ -11,5 +11,5 @@ public interface RegisterService {
      * 用户注册
      * @param userRegisterDTO
      */
-    void register(UserRegisterDTO userRegisterDTO);
+    boolean register(UserRegisterDTO userRegisterDTO);
 }

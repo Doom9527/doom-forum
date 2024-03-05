@@ -47,9 +47,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //return userMapper.getUserByUserName(userName);
         LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery()
                 .eq(User::getUserName, userName);
-        if (baseMapper.selectOne(wrapper) == null) {
-            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
-        }
+//        if (baseMapper.selectOne(wrapper) == null) {
+//            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
+//        }
         return baseMapper.selectOne(wrapper);
     }
 
@@ -71,9 +71,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getUserById(Long id) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getId, id);
-        if (baseMapper.selectOne(wrapper) == null) {
-            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
-        }
+//        if (baseMapper.selectOne(wrapper) == null) {
+//            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
+//        }
         return baseMapper.selectOne(wrapper);
     }
 

@@ -11,10 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -30,10 +29,18 @@ public class RegisterController {
 
     @ApiOperation(value = "用户注册")
     @PostMapping("/user/register")
-    public Result<String> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
-
-        registerService.register(userRegisterDTO);
-        return Result.success("注册成功");
+    public Result<String> register(@RequestParam("userName") String userName,
+                                   @RequestParam("password") String password,
+                                   @RequestParam("securityProblem") Long securityProblem,
+                                   @RequestParam("answer") String answer,
+                                   @RequestParam("avatar") MultipartFile avatar){
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
+                .userName(userName)
+                .password(password)
+                .securityProblem(securityProblem)
+                .answer(answer)
+                .avatar(avatar).build();
+        return registerService.register(userRegisterDTO) ? Result.success("注册成功") : Result.error("注册失败");
     }
 
     @ApiOperation(value = "获取密保问题")

@@ -5,6 +5,7 @@ import com.sky.dto.UserRegisterDTO;
 import com.sky.entity.User;
 import com.sky.exception.RegisterNullException;
 import com.sky.exception.UserHasBeenRegisteredException;
+import com.sky.service.OssService;
 import com.sky.service.RegisterService;
 import com.sky.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +23,16 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OssService ossService;
+
     /**
      * 用户注册
      * @param userRegisterDTO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void register(UserRegisterDTO userRegisterDTO) {
+    public boolean register(UserRegisterDTO userRegisterDTO) {
 
         //查询该用户是否已经注册
         User userByUserName = userService.getUserByUserName(userRegisterDTO.getUserName());
@@ -40,8 +44,11 @@ public class RegisterServiceImpl implements RegisterService {
         //判断字段是否为空
         maybeNull(userRegisterDTO);
 
+        // MultipartFile -> 获取上传文件
+        String url = ossService.uploadFileAvatarRegister(userRegisterDTO.getAvatar(), userRegisterDTO.getUserName());
         User user = new User();
         BeanUtils.copyProperties(userRegisterDTO,user);
+        user.setAvatar(url);
 
         //使用BCrypt加密
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -49,6 +56,8 @@ public class RegisterServiceImpl implements RegisterService {
 
         //添加用户并设置用户类型与密保关联
         userService.InsertUser(user, userRegisterDTO.getSecurityProblem());
+
+        return true;
     }
 
     private static void maybeNull(UserRegisterDTO userRegisterDTO) {

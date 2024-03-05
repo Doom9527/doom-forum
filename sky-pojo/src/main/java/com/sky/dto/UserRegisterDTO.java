@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -50,4 +51,7 @@ public class UserRegisterDTO implements Serializable {
     @NotBlank(message = "密保答案为空")
     @ApiModelProperty(value = "密保答案", required = true)
     private String answer;
+
+    @ApiModelProperty(value = "头像")
+    private MultipartFile avatar;
 }
