@@ -52,4 +52,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean modifyPassword(String password, String userId);
+
+    /**
+     * 添加用户头像url
+     * @param url
+     * @param id
+     * @return
+     */
+    boolean addAvatarURL(String url, Long id);
 }

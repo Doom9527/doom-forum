@@ -3,7 +3,9 @@ package com.sky.service.impl;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.sky.service.OssService;
+import com.sky.service.UserService;
 import com.sky.utils.ConstantPropertiesUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -11,6 +13,9 @@ import java.io.InputStream;
 
 @Service
 public class OssServiceImpl implements OssService {
+
+    @Autowired
+    private UserService userService;
 
     // 上传头像到oss
     @Override
@@ -37,6 +42,8 @@ public class OssServiceImpl implements OssService {
             // 获取url地址（根据阿里云oss中的图片实例拼接字符串） 拼接url字符串
             // https://edu-leader.oss-cn-beijing.aliyuncs.com/%E4%BB%96.jpg
             String url = "https://"+bucketName+"."+endpoint+"/"+filename;
+            // 将头像url写入数据库
+            userService.addAvatarURL(url, userService.getUserByUserName(username).getId());
             // 关闭oss
             ossClient.shutdown();
             return url;

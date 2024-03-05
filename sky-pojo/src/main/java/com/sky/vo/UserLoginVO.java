@@ -20,6 +20,9 @@ public class UserLoginVO implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String userName;
 
+    @ApiModelProperty(value = "用户头像")
+    private String avatar;
+
     private String token;
 
 }

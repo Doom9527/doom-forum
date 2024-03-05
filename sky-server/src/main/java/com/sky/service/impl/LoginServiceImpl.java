@@ -6,6 +6,7 @@ import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
 import com.sky.exception.UserNameOrPasswordErrorException;
 import com.sky.service.LoginService;
+import com.sky.service.UserService;
 import com.sky.testPojo.LoginUser;
 import com.sky.utils.CaptchaUtils;
 import com.sky.utils.JwtUtils;
@@ -13,6 +14,7 @@ import com.sky.utils.RedisCache;
 import com.sky.vo.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Resource
     private RedisCache redisCache;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserLoginVO login(UserLoginDTO userLoginDTO, Object ipAddr) {
@@ -64,6 +69,7 @@ public class LoginServiceImpl implements LoginService {
                 .id(Long.valueOf(userId))
                 .userName(loginUser.getUsername())
                 .token(token)
+                .avatar(userService.getUserById(Long.valueOf(userId)).getAvatar())
                 .build();
         return userLoginVO;
     }

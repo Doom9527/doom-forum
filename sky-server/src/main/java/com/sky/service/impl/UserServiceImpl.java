@@ -136,5 +136,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return baseMapper.update(null, wrapper) > 0;
     }
 
+    /**
+     * 添加用户头像url
+     * @param url
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean addAvatarURL(String url, Long id) {
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(User::getAvatar, url)
+                .eq(User::getId, id);
+        return baseMapper.update(null, wrapper) > 0;
+    }
+
 
 }
