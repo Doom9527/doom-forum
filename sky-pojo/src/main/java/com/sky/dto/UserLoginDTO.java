@@ -18,6 +18,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserLoginDTO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @NotBlank(message = "用户名为空")
     @ApiModelProperty(value = "用户名", required = true)
     private String userName;

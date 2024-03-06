@@ -68,4 +68,19 @@ public class RabbitMQConstant {
      * 订单取消KEY
      */
     public static final String ORDER_CANCEL_KEY = "cancel";
+
+    /**
+     * 博客发布队列
+     */
+    public static final String BLOG_PUBLISH_QUEUE = "mark.order.blog.queue";
+
+    /**
+     * 博客发布交换机
+     */
+    public static final String BLOG_PUBLISH_EXCHANGE = "blog.topic";
+
+    /**
+     * 博客发布key
+     */
+    public static final String BLOG_PUBLISH_KEY = "blog";
 }

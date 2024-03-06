@@ -2,8 +2,7 @@ package com.sky.mq.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.sky.constant.RabbitMQConstant;
-import com.sky.entity.OrderCanceMQInfo;
-import com.sky.entity.OrderPayMQInfo;
+import com.sky.MQInfo.OrderCanceMQInfo;
 import com.sky.service.OrdersService;
 import com.sky.service.ProductService;
 import lombok.RequiredArgsConstructor;

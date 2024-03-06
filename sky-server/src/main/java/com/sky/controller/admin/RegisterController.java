@@ -9,6 +9,7 @@ import com.sky.service.UserService;
 import com.sky.vo.ProblemVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +30,11 @@ public class RegisterController {
 
     @ApiOperation(value = "用户注册")
     @PostMapping("/user/register")
-    public Result<String> register(@RequestParam("userName") String userName,
-                                   @RequestParam("password") String password,
-                                   @RequestParam("securityProblem") Long securityProblem,
-                                   @RequestParam("answer") String answer,
-                                   @RequestParam("avatar") MultipartFile avatar){
+    public Result<String> register(@ApiParam(value = "用户名", required = true) @RequestParam("userName") String userName,
+                                   @ApiParam(value = "密码", required = true) @RequestParam("password") String password,
+                                   @ApiParam(value = "密保id", required = true) @RequestParam("securityProblem") Long securityProblem,
+                                   @ApiParam(value = "密保答案", required = true) @RequestParam("answer") String answer,
+                                   @ApiParam(value = "头像") @RequestParam("avatar") MultipartFile avatar){
         UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
                 .userName(userName)
                 .password(password)

@@ -19,4 +19,11 @@ public interface OssService {
      * @return
      */
     String uploadFileAvatar(MultipartFile file, String username);
+
+    /**
+     * 博客图片上传
+     * @param file
+     * @return
+     */
+    String uploadFileBlogPic(MultipartFile file);
 }

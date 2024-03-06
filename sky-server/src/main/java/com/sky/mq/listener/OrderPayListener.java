@@ -2,10 +2,8 @@ package com.sky.mq.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.sky.constant.RabbitMQConstant;
-import com.sky.entity.OrderPayMQInfo;
-import com.sky.entity.OrderPlaceMQInfo;
+import com.sky.MQInfo.OrderPayMQInfo;
 import com.sky.service.OrdersService;
-import com.sky.utils.RedisCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;

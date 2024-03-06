@@ -1,4 +1,4 @@
-package com.sky.entity;
+package com.sky.MQInfo;
 
 import lombok.Builder;
 import lombok.Data;

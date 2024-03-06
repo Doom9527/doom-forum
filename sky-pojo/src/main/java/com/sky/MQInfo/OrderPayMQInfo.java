@@ -1,4 +1,4 @@
-package com.sky.entity;
+package com.sky.MQInfo;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderCanceMQInfo {
-    private Long[] ids;
+public class OrderPayMQInfo {
     private List<String> redisKey;
 }

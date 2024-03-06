@@ -18,7 +18,8 @@ import java.util.Date;
 @TableName("sys_user")
 //TODO 此处有BUG未使用公共字段自动填充
 public class User implements Serializable {
-    private static final long serialVersionUID = -40356785423868312L;
+    private static final long serialVersionUID = 1L;
+
 
     /**
      * 主键
