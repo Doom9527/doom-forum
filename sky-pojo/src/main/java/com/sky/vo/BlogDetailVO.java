@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 @Data
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BlogVO implements Serializable {
+public class BlogDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
@@ -22,6 +23,9 @@ public class BlogVO implements Serializable {
 
     @ApiModelProperty(value = "标题")
     private String title;
+
+    @ApiModelProperty(value = "文章内容")
+    private String content;
 
     @ApiModelProperty(value = "作者id")
     private Long authorId;
@@ -37,4 +41,10 @@ public class BlogVO implements Serializable {
 
     @ApiModelProperty(value = "点赞数")
     private Integer likeCount;
+
+    @ApiModelProperty(value = "收藏数")
+    private Integer collectCount;
+
+    @ApiModelProperty(value = "评论数")
+    private Integer commentCount;
 }

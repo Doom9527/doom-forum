@@ -10,10 +10,13 @@ import com.sky.entity.Blog;
 import com.sky.mapper.BlogMapper;
 import com.sky.service.BlogService;
 import com.sky.service.OssService;
+import com.sky.vo.BlogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -71,5 +74,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         wrapper.set(Blog::getPicture, url)
                 .eq(Blog::getAuthorId, authorId);
         return baseMapper.update(null, wrapper) > 0;
+    }
+
+    /**
+     * 主页面获取博客
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<BlogVO> getBlogByCategoryId(Long categoryId) {
+        List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(categoryId);
+        return vos;
     }
 }

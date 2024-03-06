@@ -3,6 +3,9 @@ package com.sky.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogDTO;
 import com.sky.entity.Blog;
+import com.sky.vo.BlogVO;
+
+import java.util.List;
 
 public interface BlogService extends IService<Blog> {
     /**
@@ -21,4 +24,18 @@ public interface BlogService extends IService<Blog> {
      * @return
      */
     boolean updateURL(String url, Long authorId);
+
+    /**
+     * 主页面获取博客
+     * @param categoryId
+     * @return
+     */
+    List<BlogVO> getBlogByCategoryId(Long categoryId);
+
+    /**
+     * 查看博客详情
+     * @param blogId
+     * @return
+     */
+
 }

@@ -5,6 +5,7 @@ import com.sky.result.Result;
 import com.sky.service.BlogService;
 import com.sky.service.CategoriesService;
 import com.sky.utils.JwtUtils;
+import com.sky.vo.BlogDetailVO;
 import com.sky.vo.BlogVO;
 import com.sky.vo.CategoriesVO;
 import io.swagger.annotations.Api;
@@ -31,9 +32,16 @@ public class HomePageController {
     @Autowired
     private CategoriesService categoriesService;
 
-    @ApiOperation(value = "获取博客")
-    @GetMapping("/blog")
-    public Result<List<BlogVO>> getBlog() {
+    @ApiOperation(value = "主界面获取博客")
+    @GetMapping("/blog/{categoryId}")
+    public Result<List<BlogVO>> getBlog(@PathVariable Long categoryId) {
+        List<BlogVO> vos = blogService.getBlogByCategoryId(categoryId);
+        return Result.success(vos);
+    }
+
+    @ApiOperation(value = "查看博客详情")
+    @GetMapping("/detail/{blogId}")
+    public Result<BlogDetailVO> getDetail(@PathVariable Long blogId) {
         return null;
     }
 
