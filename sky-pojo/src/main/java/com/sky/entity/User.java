@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -69,6 +71,7 @@ public class User implements Serializable {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     /**
      * 更新人
@@ -77,6 +80,7 @@ public class User implements Serializable {
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date updateTime;
     /**

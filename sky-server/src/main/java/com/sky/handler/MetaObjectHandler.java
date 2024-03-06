@@ -8,6 +8,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Component
 @Slf4j
@@ -18,11 +20,12 @@ public class MetaObjectHandler implements com.baomidou.mybatisplus.core.handlers
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        metaObject.setValue(AutoFillConstant.CREATE_TIME, LocalDateTime.now());
-        metaObject.setValue(AutoFillConstant.UPDATE_TIME, LocalDateTime.now());
-        Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
-        metaObject.setValue(AutoFillConstant.CREATE_USER, id);
-        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
+        Date now = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        metaObject.setValue(AutoFillConstant.CREATE_TIME, now);
+        metaObject.setValue(AutoFillConstant.UPDATE_TIME, now);
+//        Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
+//        metaObject.setValue(AutoFillConstant.CREATE_USER, id);
+//        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
     }
 
     /**
@@ -31,8 +34,9 @@ public class MetaObjectHandler implements com.baomidou.mybatisplus.core.handlers
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        metaObject.setValue(AutoFillConstant.UPDATE_TIME, LocalDateTime.now());
-        Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
-        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
+        Date now = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        metaObject.setValue(AutoFillConstant.UPDATE_TIME, now);
+//        Long id = Long.valueOf(JwtUtils.getUserId(BaseContext.getToken()));
+//        metaObject.setValue(AutoFillConstant.UPDATE_USER, id);
     }
 }

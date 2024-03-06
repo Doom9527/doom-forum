@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -38,10 +40,13 @@ public class Blog implements Serializable {
      * 分类id
      */
     private Long categoryId;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
+    //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     /**
      * 审核状态

@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -26,5 +28,6 @@ public class Likes implements Serializable {
     private Long userId;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 }
