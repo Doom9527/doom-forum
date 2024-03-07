@@ -38,6 +38,13 @@ public class HomePageController {
     @Autowired
     private LikesService likesService;
 
+    @ApiOperation(value = "获取所有分类")
+    @GetMapping("/cate")
+    public Result<List<CategoriesVO>> getCategories() {
+        List<CategoriesVO> vos = categoriesService.getCategories();
+        return Result.success(vos);
+    }
+
     @ApiOperation(value = "主界面获取博客, 这里不携带token访问的话就是游客页面, 看不到自己点赞过的文章")
     @GetMapping("/blog/{categoryId}")
     public Result<List<BlogVO>> getBlog(@PathVariable Long categoryId, HttpServletRequest request) {
@@ -47,12 +54,6 @@ public class HomePageController {
         }
         List<BlogVO> vos = blogService.getBlogByCategoryId(categoryId, userId);
         return Result.success(vos);
-    }
-
-    @ApiOperation(value = "查看博客详情")
-    @GetMapping("/detail/{blogId}")
-    public Result<BlogDetailVO> getDetail(@PathVariable Long blogId) {
-        return null;
     }
 
     @ApiOperation(value = "发布博客")
@@ -73,13 +74,6 @@ public class HomePageController {
         return blogService.publishBlog(blogDTO) ? Result.success("发布成功，管理员审核中") : Result.error("发布失败");
     }
 
-    @ApiOperation(value = "获取所有分类")
-    @GetMapping("/cate")
-    public Result<List<CategoriesVO>> getCategories() {
-        List<CategoriesVO> vos = categoriesService.getCategories();
-        return Result.success(vos);
-    }
-
     @ApiOperation(value = "点赞或取消点赞: 点过赞再点一下就会取消, 需要携带token访问")
     @PutMapping("/blog")
     public Result<BlogVO> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
@@ -87,5 +81,4 @@ public class HomePageController {
         BlogVO vo = likesService.likeBlog(blogLikeDTO, Long.valueOf(userId));
         return  Result.success(vo);
     }
-
 }

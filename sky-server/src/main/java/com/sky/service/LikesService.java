@@ -2,7 +2,6 @@ package com.sky.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogLikeDTO;
-import com.sky.entity.Blog;
 import com.sky.entity.Likes;
 import com.sky.vo.BlogVO;
 
