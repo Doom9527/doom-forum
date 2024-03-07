@@ -37,4 +37,7 @@ public class BlogVO implements Serializable {
 
     @ApiModelProperty(value = "点赞数")
     private Integer likeCount;
+
+    @ApiModelProperty(value = "点赞状态: 0没点 1点了")
+    private Integer status;
 }

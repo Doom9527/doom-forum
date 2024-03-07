@@ -30,12 +30,6 @@ public interface BlogService extends IService<Blog> {
      * @param categoryId
      * @return
      */
-    List<BlogVO> getBlogByCategoryId(Long categoryId);
-
-    /**
-     * 查看博客详情
-     * @param blogId
-     * @return
-     */
+    List<BlogVO> getBlogByCategoryId(Long categoryId, Long userId);
 
 }

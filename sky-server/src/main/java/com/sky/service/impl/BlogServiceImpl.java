@@ -57,10 +57,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 .content(content)
                 .categoryId(categoryId)
                 .authorId(authorId).build();
-
         return baseMapper.insert(blog);
     }
-
 
     /**
      * 更新博客图片url
@@ -82,8 +80,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
      * @return
      */
     @Override
-    public List<BlogVO> getBlogByCategoryId(Long categoryId) {
-        List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(categoryId);
+    public List<BlogVO> getBlogByCategoryId(Long categoryId, Long userId) {
+        List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(categoryId, userId);
         return vos;
     }
 }

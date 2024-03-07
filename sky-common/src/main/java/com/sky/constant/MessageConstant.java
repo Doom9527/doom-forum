@@ -30,4 +30,10 @@ public class MessageConstant {
     public static final String USER_IS_NULL = "该用户不存在";
 
     public static final String PASSWORD_RE_ERROR = "新的密码不能和以前一样";
+
+    public static final String BLOG_NULL = "未找到该博客";
+
+    public static final String LIKES_NULL = "未找到该点赞记录";
+
+    public static final String INPUT_LIKE_ERROR = "传入参数有误";
 }
