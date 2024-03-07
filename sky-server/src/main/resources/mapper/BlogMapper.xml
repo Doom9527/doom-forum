@@ -59,4 +59,43 @@
         ORDER BY
         like_count DESC
     </select>
+
+    <select id="selectBlogDetail" resultType="com.sky.vo.BlogDetailVO">
+        SELECT
+            b.id,
+            b.title,
+            b.content,
+            b.picture,
+            u.avatar,
+            b.author_id AS authorId,
+            u.user_name AS authorName,
+            COUNT(l.id) as like_count,
+            COUNT(f.id) as favor_count,
+            COUNT(c.id) as comment_count,
+            MAX(CASE WHEN l.status = 1
+                AND l.user_id = #{userId}
+                         THEN 1 ELSE 0 END) AS status1,
+            MAX(CASE WHEN f.status = 1
+                AND f.user_id = #{userId}
+                         THEN 1 ELSE 0 END) AS status2
+        FROM
+            sys_blog b
+                LEFT JOIN
+            sys_likes l ON b.id = l.post_id
+                LEFT JOIN
+            sys_favor f ON b.id = f.post_id
+                LEFT JOIN
+            sys_comment c ON b.id = c.post_id
+                LEFT JOIN
+            sys_user u ON b.author_id = u.id
+        WHERE
+            b.status = 0 AND
+            b.examine = 0 AND
+            b.id = #{postId}
+        GROUP BY
+            b.id
+        ORDER BY
+            like_count DESC
+    </select>
+
 </mapper>

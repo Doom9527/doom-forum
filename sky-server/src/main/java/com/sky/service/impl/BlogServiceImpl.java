@@ -10,6 +10,7 @@ import com.sky.entity.Blog;
 import com.sky.mapper.BlogMapper;
 import com.sky.service.BlogService;
 import com.sky.service.OssService;
+import com.sky.vo.BlogDetailVO;
 import com.sky.vo.BlogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -83,5 +84,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public List<BlogVO> getBlogByCategoryId(Long categoryId, Long userId) {
         List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(categoryId, userId);
         return vos;
+    }
+
+    /**
+     * 查看博客详情
+     * @param blogId
+     * @return
+     */
+    @Override
+    public BlogDetailVO getBlogByBlogId(Long userId, Long blogId) {
+        List<BlogDetailVO> vos = baseMapper.selectBlogDetail(userId, blogId);
+        return vos.get(0);
     }
 }

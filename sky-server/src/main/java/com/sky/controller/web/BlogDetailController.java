@@ -3,6 +3,7 @@ package com.sky.controller.web;
 import com.sky.dto.BlogFavorDTO;
 import com.sky.dto.BlogLikeDTO;
 import com.sky.result.Result;
+import com.sky.service.BlogService;
 import com.sky.service.FavorService;
 import com.sky.service.LikesService;
 import com.sky.utils.JwtUtils;
@@ -22,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 public class BlogDetailController {
 
     @Autowired
+    private BlogService blogService;
+
+    @Autowired
     private LikesService likesService;
 
     @Autowired
@@ -29,23 +33,25 @@ public class BlogDetailController {
 
     @ApiOperation(value = "查看博客详情")
     @GetMapping("/{blogId}")
-    public Result<BlogDetailVO> getDetail(@PathVariable Long blogId) {
-        return null;
+    public Result<BlogDetailVO> getDetail(@PathVariable Long blogId, HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        BlogDetailVO vo = blogService.getBlogByBlogId(Long.valueOf(userId), blogId);
+        return Result.success(vo);
     }
 
-//    @ApiOperation(value = "点赞或取消点赞: 点过赞再点一下就会取消, 需要携带token访问")
-//    @PutMapping("/like")
-//    public Result<BlogDetailVO> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
-//        String userId = JwtUtils.getUserId(request.getHeader("token"));
-//        BlogDetailVO vo = likesService.likeBlogDetail(blogLikeDTO, Long.valueOf(userId));
-//        return  Result.success(vo);
-//    }
-//
-//    @ApiOperation(value = "收藏或取消收藏: 收藏再点一下就会取消, 需要携带token访问")
-//    @PutMapping("/favor")
-//    public Result<BlogDetailVO> favor(@RequestBody BlogFavorDTO blogFavorDTO, HttpServletRequest request) {
-//        String userId = JwtUtils.getUserId(request.getHeader("token"));
-//        BlogDetailVO vo = favorService.favorBlogDetail(blogFavorDTO, Long.valueOf(userId));
-//        return  Result.success(vo);
-//    }
+    @ApiOperation(value = "点赞或取消点赞: 点过赞再点一下就会取消, 需要携带token访问")
+    @PutMapping("/like")
+    public Result<BlogDetailVO> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        BlogDetailVO vo = likesService.likeBlogDetail(blogLikeDTO, Long.valueOf(userId));
+        return  Result.success(vo);
+    }
+
+    @ApiOperation(value = "收藏或取消收藏: 收藏再点一下就会取消, 需要携带token访问")
+    @PutMapping("/favor")
+    public Result<BlogDetailVO> favor(@RequestBody BlogFavorDTO blogFavorDTO, HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        BlogDetailVO vo = favorService.favorBlogDetail(blogFavorDTO, Long.valueOf(userId));
+        return  Result.success(vo);
+    }
 }
