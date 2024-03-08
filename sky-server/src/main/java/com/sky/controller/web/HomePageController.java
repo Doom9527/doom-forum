@@ -25,7 +25,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Api(tags = "主页")
+@Api(tags = "博客模块")
 @RequestMapping("/home")
 public class HomePageController {
 
@@ -76,9 +76,8 @@ public class HomePageController {
 
     @ApiOperation(value = "点赞或取消点赞: 点过赞再点一下就会取消, 需要携带token访问")
     @PutMapping("/blog")
-    public Result<BlogVO> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
+    public Result<String> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
-        BlogVO vo = likesService.likeBlog(blogLikeDTO, Long.valueOf(userId));
-        return  Result.success(vo);
+        return likesService.likeBlog(blogLikeDTO, Long.valueOf(userId)) ? Result.success("点赞成功") : Result.error("点赞失败");
     }
 }

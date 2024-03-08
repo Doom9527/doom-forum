@@ -16,7 +16,7 @@ public interface FavorService extends IService<Favor> {
      * @param userId
      * @return
      */
-    BlogDetailVO favorBlogDetail(BlogFavorDTO blogFavorDTO, Long userId);
+    boolean favorBlogDetail(BlogFavorDTO blogFavorDTO, Long userId);
 
     /**
      * 按博客id和用户id查找收藏记录

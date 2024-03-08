@@ -69,9 +69,9 @@
             u.avatar,
             b.author_id AS authorId,
             u.user_name AS authorName,
-            COUNT(l.id) as like_count,
-            COUNT(f.id) as favor_count,
-            COUNT(c.id) as comment_count,
+        COUNT(DISTINCT CASE WHEN l.status = 1 THEN l.id END) AS like_count,
+        COUNT(DISTINCT CASE WHEN f.status = 1 THEN f.id END) AS favor_count,
+        COUNT(c.id) AS comment_count,
             MAX(CASE WHEN l.status = 1
                 AND l.user_id = #{userId}
                          THEN 1 ELSE 0 END) AS status1,
@@ -90,12 +90,39 @@
             sys_user u ON b.author_id = u.id
         WHERE
             b.status = 0 AND
-            b.examine = 0 AND
-            b.id = #{postId}
+            b.examine = 0
+        <if test="postId != null and postId !=''">
+            AND b.id = #{postId}
+        </if>
         GROUP BY
             b.id
         ORDER BY
             like_count DESC
+    </select>
+
+    <select id="selectBlogDECSByDateTime" resultType="com.sky.vo.BlogFavorVO" parameterType="java.lang.Long">
+        SELECT
+        b.id,
+        b.title,
+        b.picture,
+        u.avatar,
+        b.author_id AS authorId,
+        u.user_name AS authorName,
+        f.update_time AS updateTime,
+        f.status
+        FROM
+        sys_blog b
+        LEFT JOIN
+        sys_favor f ON b.id = f.post_id
+        LEFT JOIN
+        sys_user u ON b.author_id = u.id
+        WHERE
+        b.status = 0 AND
+        b.examine = 0 AND
+        f.status = 1 AND
+        f.user_id = #{userId}
+        ORDER BY
+        updateTime DESC
     </select>
 
 </mapper>

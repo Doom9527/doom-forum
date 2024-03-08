@@ -15,7 +15,7 @@ public interface CommentService extends IService<Comment> {
      * 按博客查询评论列表
      * @return
      */
-    List<CommentVO> listComment(Long postId);
+    List<CommentVO> listComment(Long postId, Integer flag);
 
     /**
      * 保存一级评论

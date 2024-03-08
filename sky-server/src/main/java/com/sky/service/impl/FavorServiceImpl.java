@@ -28,7 +28,7 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
      * @return
      */
     @Override
-    public BlogDetailVO favorBlogDetail(BlogFavorDTO blogFavorDTO, Long userId) {
+    public boolean favorBlogDetail(BlogFavorDTO blogFavorDTO, Long userId) {
         //判断是否有收藏记录
         List<Favor> likes = selectBlogByDuoId(blogFavorDTO.getPostId(), userId);
         if (likes.isEmpty()) { // 没有找到已存在的收藏记录
@@ -55,7 +55,7 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
             baseMapper.update(null, wrapper);
         }
 
-        return blogMapper.selectBlogDetail(userId, blogFavorDTO.getPostId()).get(0);
+        return true;
     }
 
     /**

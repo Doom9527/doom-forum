@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogDTO;
 import com.sky.entity.Blog;
 import com.sky.vo.BlogDetailVO;
+import com.sky.vo.BlogFavorVO;
 import com.sky.vo.BlogVO;
 
 import java.util.List;
@@ -39,4 +40,9 @@ public interface BlogService extends IService<Blog> {
      * @return
      */
     BlogDetailVO getBlogByBlogId(Long userId, Long blogId);
+
+    /**
+     * 查看收藏的博客
+     */
+    List<BlogFavorVO> getBlogForFavor(Long userId);
 }

@@ -54,6 +54,9 @@ public class CommentVO implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    @ApiModelProperty(value = "二级评论及其子回复数量")
+    private Integer total;
+
     @ApiModelProperty(value = "二级评论及其子回复")
     private List<CommentVO2> replyComments = new ArrayList<>();
 }

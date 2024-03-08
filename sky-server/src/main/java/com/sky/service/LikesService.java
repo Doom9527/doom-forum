@@ -15,15 +15,7 @@ public interface LikesService extends IService<Likes> {
      * @param userId
      * @return
      */
-    BlogVO likeBlog(BlogLikeDTO blogLikeDTO, Long userId);
-
-    /**
-     * 点赞
-     * @param blogLikeDTO
-     * @param userId
-     * @return
-     */
-    BlogDetailVO likeBlogDetail(BlogLikeDTO blogLikeDTO, Long userId);
+    boolean likeBlog(BlogLikeDTO blogLikeDTO, Long userId);
 
     /**
      * 按博客id和用户id查找点赞记录

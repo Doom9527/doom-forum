@@ -8,11 +8,13 @@ import com.sky.utils.JwtUtils;
 import com.sky.vo.CommentVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -25,9 +27,10 @@ public class CommentController {
     private CommentService commentService;
 
     @ApiOperation(value = "按博客id获取评论")
-    @GetMapping("/{postId}")
-    public Result<List<CommentVO>> getComments(@PathVariable Long postId) {
-        List<CommentVO> vos = commentService.listComment(postId);
+    @GetMapping
+    public Result<List<CommentVO>> getComments(@ApiParam(value = "博客id", required = true) @Valid @RequestParam Long postId,
+                                               @ApiParam(value = "查询类型: 1最新 2最热") @Valid @RequestParam Integer flag) {
+        List<CommentVO> vos = commentService.listComment(postId, flag);
         return Result.success(vos);
     }
 

@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sky.entity.Blog;
 import com.sky.vo.BlogDetailVO;
+import com.sky.vo.BlogFavorVO;
 import com.sky.vo.BlogVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,9 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * 详情页博客VO
      */
     List<BlogDetailVO> selectBlogDetail(@Param("userId") Long userId, @Param("postId") Long postId);
+
+    /**
+     * 查看收藏的博客
+     */
+    List<BlogFavorVO> selectBlogDECSByDateTime(@Param("userId") Long userId);
 }
