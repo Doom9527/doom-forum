@@ -3,16 +3,20 @@ package com.sky.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
+import com.sky.dto.PageDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.exception.ObjectNullException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.UserMapper;
+import com.sky.result.PageQuery;
 import com.sky.service.ProblemService;
 import com.sky.service.UserService;
 import com.sky.utils.RedisCache;
+import com.sky.vo.UserOPVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -148,6 +152,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.set(User::getAvatar, url)
                 .eq(User::getId, id);
         return baseMapper.update(null, wrapper) > 0;
+    }
+
+    /**
+     * 查找全部学生
+     * @param query
+     * @return
+     */
+    @Override
+    public PageDTO<UserOPVO> selectAll(PageQuery query) {
+        Page<User> page = query.toMpPageDefaultSortByCreateTimeDesc();
+        page(page);
+        return PageDTO.of(page, UserOPVO.class);
     }
 
 

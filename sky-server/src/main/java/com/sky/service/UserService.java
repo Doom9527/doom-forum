@@ -1,8 +1,11 @@
 package com.sky.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sky.dto.PageDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
+import com.sky.result.PageQuery;
+import com.sky.vo.UserOPVO;
 
 import java.util.List;
 
@@ -60,4 +63,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean addAvatarURL(String url, Long id);
+
+    /**
+     * 查找全部学生
+     * @param query
+     * @return
+     */
+    PageDTO<UserOPVO> selectAll(PageQuery query);
 }

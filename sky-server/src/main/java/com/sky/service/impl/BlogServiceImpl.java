@@ -7,11 +7,14 @@ import com.sky.MQInfo.BlogPublishInfo;
 import com.sky.constant.RabbitMQConstant;
 import com.sky.dto.BlogDTO;
 import com.sky.entity.Blog;
+import com.sky.entity.User;
 import com.sky.mapper.BlogMapper;
 import com.sky.service.BlogService;
 import com.sky.service.OssService;
+import com.sky.service.UserService;
 import com.sky.vo.BlogDetailVO;
 import com.sky.vo.BlogFavorVO;
+import com.sky.vo.BlogSentVO;
 import com.sky.vo.BlogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -29,6 +32,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Autowired
     private OssService ossService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 发布博客
@@ -107,5 +113,47 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public List<BlogFavorVO> getBlogForFavor(Long userId) {
         List<BlogFavorVO> vos = baseMapper.selectBlogDECSByDateTime(userId);
         return vos;
+    }
+
+    /**
+     * 查看发过的博客
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<BlogSentVO> getBlogSent(Long userId) {
+        List<BlogSentVO> vos = baseMapper.selectBlogSent(userId);
+        return vos;
+    }
+
+    /**
+     * 按id删除博客
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteBlogById(Long id, Long userId) {
+        User user = userService.getUserById(userId);
+        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Blog::getStatus, 0)
+                .eq(Blog::getId, id);
+        if (user.getUserType().equals("1") || user.getUserType().equals("2")) {
+            wrapper.eq(Blog::getAuthorId, userId);
+        }
+        return baseMapper.update(null, wrapper) > 0;
+    }
+
+    /**
+     * 按id审核博客
+     * @param id
+     * @param flag
+     * @return
+     */
+    @Override
+    public boolean examineBlogById(Long id, Integer flag) {
+        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Blog::getExamine, flag)
+                .eq(Blog::getId, id);
+        return baseMapper.update(null, wrapper) > 0;
     }
 }

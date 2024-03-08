@@ -21,8 +21,8 @@
         LEFT JOIN
         sys_user u ON b.author_id = u.id
         WHERE
-        b.status = 0 AND
-        b.examine = 0
+        b.status = 1 AND
+        b.examine = 1
         <if test="categoryId != null">
             AND b.category_id = #{categoryId}
         </if>
@@ -51,8 +51,8 @@
         LEFT JOIN
         sys_user u ON b.author_id = u.id
         WHERE
-        b.status = 0 AND
-        b.examine = 0 AND
+        b.status = 1 AND
+        b.examine = 1 AND
         b.id = #{postId}
         GROUP BY
         b.id
@@ -89,8 +89,8 @@
                 LEFT JOIN
             sys_user u ON b.author_id = u.id
         WHERE
-            b.status = 0 AND
-            b.examine = 0
+            b.status = 1 AND
+            b.examine = 1
         <if test="postId != null and postId !=''">
             AND b.id = #{postId}
         </if>
@@ -117,12 +117,56 @@
         LEFT JOIN
         sys_user u ON b.author_id = u.id
         WHERE
-        b.status = 0 AND
-        b.examine = 0 AND
+        b.status = 1 AND
+        b.examine = 1 AND
         f.status = 1 AND
         f.user_id = #{userId}
         ORDER BY
         updateTime DESC
+    </select>
+
+    <select id="selectBlogSent" resultType="com.sky.vo.BlogSentVO" parameterType="java.lang.Long">
+        SELECT
+            b.id,
+            b.title,
+            b.picture,
+            u.avatar,
+            b.author_id AS authorId,
+            u.user_name AS authorName,
+            b.examine,
+            COALESCE(L.like_count, 0) AS like_count,
+            COALESCE(F.favor_count, 0) AS favor_count,
+            COUNT(c.id) AS comment_count
+        FROM
+            sys_blog b
+                LEFT JOIN
+            (SELECT post_id, COUNT(*) AS like_count
+             FROM sys_likes
+             WHERE status = 1
+             GROUP BY post_id) L ON b.id = L.post_id
+                LEFT JOIN
+            (SELECT post_id, COUNT(*) AS favor_count
+             FROM sys_favor
+             WHERE status = 1
+             GROUP BY post_id) F ON b.id = F.post_id
+                LEFT JOIN
+            sys_comment c ON b.id = c.post_id
+                LEFT JOIN
+            sys_user u ON b.author_id = u.id
+        WHERE
+            b.status = 1 AND
+            b.examine = 1 AND
+            b.author_id = #{userId}
+        GROUP BY
+            b.id,
+            b.title,
+            b.picture,
+            u.avatar,
+            b.author_id,
+            u.user_name,
+            b.examine
+        ORDER BY
+            b.update_time DESC;
     </select>
 
 </mapper>

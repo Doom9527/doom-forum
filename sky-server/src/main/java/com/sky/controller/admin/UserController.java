@@ -12,6 +12,7 @@ import com.sky.vo.BlogFavorVO;
 import com.sky.vo.BlogVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private BlogService blogService;
-
     @ApiOperation(value = "用户修改头像: 用户登录后进行,携带token")
     @PostMapping("/upload")
-    public Result<String> uploadOssFile(MultipartFile file, HttpServletRequest request) {
+    public Result<String> uploadOssFile(@ApiParam(value = "头像文件", required = true) MultipartFile file, HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         User user = userService.getUserById(Long.valueOf(id));
         // MultipartFile -> 获取上传文件
@@ -57,7 +55,7 @@ public class UserController {
 
     @ApiOperation(value = "验证密保问题: 用户登录后进行,携带token. true成功,false失败. 成功后在30分钟内修改密码,否则过期失效")
     @PostMapping("/check")
-    public Result<Boolean> check(@Valid @RequestParam String answer, HttpServletRequest request) {
+    public Result<Boolean> check(@ApiParam(value = "答案", required = true) @Valid @RequestParam String answer, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         Boolean flag = userService.checkAnswer(answer, userId);
         return Result.success(flag);
@@ -65,22 +63,23 @@ public class UserController {
 
     @ApiOperation(value = "修改密码: 用户登录后进行,携带token")
     @PutMapping("/modify")
-    public Result<String> modify(@Valid @RequestParam String password, HttpServletRequest request) {
+    public Result<String> modify(@ApiParam(value = "密码", required = true) @Valid @RequestParam String password, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return userService.modifyPassword(password, userId) ? Result.success() : Result.error("0");
     }
 
     @ApiOperation(value = "查询用户密保问题: 登录前进行,无token")
     @GetMapping("/check2/{userName}")
-    public Result<Problem> getAnswer(@Valid @PathVariable String userName) {
+    public Result<Problem> getAnswer(@ApiParam(value = "用户名", required = true) @Valid @PathVariable String userName) {
         User user = userService.getUserByUserName(userName);
         Problem problem = userService.getProblemByUserId(user.getId().toString());
         return Result.success(problem);
     }
 
-    @ApiOperation(value = "验证密保问题: 登录前进行,无token. true成功,false失败. 成功后在30分钟内修改密码,否则过期失效")
+    @ApiOperation(value = "验证密保问题: 登录前进行,无token. 返回结果 true成功,false失败. 成功后在30分钟内修改密码,否则过期失效")
     @PostMapping("/check2")
-    public Result<Boolean> check(@Valid @RequestParam String answer, @Valid @RequestParam String userName) {
+    public Result<Boolean> check(@ApiParam(value = "答案", required = true) @Valid @RequestParam String answer,
+                                 @ApiParam(value = "用户名", required = true) @Valid @RequestParam String userName) {
         User user = userService.getUserByUserName(userName);
         Boolean flag = userService.checkAnswer(answer, user.getId().toString());
         return Result.success(flag);
@@ -88,17 +87,9 @@ public class UserController {
 
     @ApiOperation(value = "修改密码: 登录前进行,无token")
     @PutMapping("/modify2")
-    public Result<String> modify(@Valid @RequestParam String password, @Valid @RequestParam String userName) {
+    public Result<String> modify(@ApiParam(value = "密码", required = true) @Valid @RequestParam String password,
+                                 @ApiParam(value = "用户名", required = true) @Valid @RequestParam String userName) {
         User user = userService.getUserByUserName(userName);;
         return userService.modifyPassword(password, user.getId().toString()) ? Result.success() : Result.error("0");
     }
-
-    @ApiOperation(value = "查看自己收藏过的博客,携带token")
-    @GetMapping("/favor")
-    public Result<List<BlogFavorVO>> getFavor(HttpServletRequest request) {
-        String userId = JwtUtils.getUserId(request.getHeader("token"));
-        List<BlogFavorVO> vos = blogService.getBlogForFavor(Long.valueOf(userId));
-        return Result.success(vos);
-    }
-
 }

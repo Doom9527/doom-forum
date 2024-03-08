@@ -25,7 +25,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Api(tags = "博客模块")
+@Api(tags = "主页面")
 @RequestMapping("/home")
 public class HomePageController {
 
@@ -56,7 +56,7 @@ public class HomePageController {
         return Result.success(vos);
     }
 
-    @ApiOperation(value = "发布博客")
+    @ApiOperation(value = "发布博客, 需要携带token访问")
     @PostMapping("/blog")
     public Result<String> publishBlog(@ApiParam(value = "博客标题", required = true) @Valid @RequestParam("title") String title,
                                       @ApiParam(value = "博客内容", required = true)@Valid @RequestParam("content") String content,

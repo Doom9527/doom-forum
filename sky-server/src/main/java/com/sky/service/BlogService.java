@@ -5,6 +5,7 @@ import com.sky.dto.BlogDTO;
 import com.sky.entity.Blog;
 import com.sky.vo.BlogDetailVO;
 import com.sky.vo.BlogFavorVO;
+import com.sky.vo.BlogSentVO;
 import com.sky.vo.BlogVO;
 
 import java.util.List;
@@ -45,4 +46,26 @@ public interface BlogService extends IService<Blog> {
      * 查看收藏的博客
      */
     List<BlogFavorVO> getBlogForFavor(Long userId);
+
+    /**
+     * 查看发过的博客
+     * @param userId
+     * @return
+     */
+    List<BlogSentVO> getBlogSent(Long userId);
+
+    /**
+     * 按id删除博客
+     * @param id
+     * @return
+     */
+    boolean deleteBlogById(Long id, Long userId);
+
+    /**
+     * 按id审核博客
+     * @param id
+     * @param flag
+     * @return
+     */
+    boolean examineBlogById(Long id, Integer flag);
 }
