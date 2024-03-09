@@ -51,6 +51,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                             .parentUserName(comment.getParentUserName())
                             .rootCommentId(comment.getRootCommentId())
                             .createTime(comment.getCreateTime())
+                            .status(comment.getStatus())
                             .build();
                     LambdaQueryWrapper<Comment> wrapper1 = new LambdaQueryWrapper<>();
                     wrapper1.eq(Comment::getPostId, postId)

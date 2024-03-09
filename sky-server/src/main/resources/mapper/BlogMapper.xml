@@ -27,8 +27,11 @@
         WHERE
         b.status = 1 AND
         b.examine = 1
-        <if test="categoryId != null">
+        <if test="categoryId != null and categoryId != ''">
             AND b.category_id = #{categoryId}
+        </if>
+        <if test="title != null and title != ''">
+            AND b.title like CONCAT('%', #{title}, '%')
         </if>
         GROUP BY
         b.id

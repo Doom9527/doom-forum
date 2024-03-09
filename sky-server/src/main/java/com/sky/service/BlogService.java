@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogDTO;
+import com.sky.dto.BlogHomePageDTO;
 import com.sky.dto.BlogPageDTO;
 import com.sky.entity.Blog;
 import com.sky.result.Result;
@@ -31,10 +32,11 @@ public interface BlogService extends IService<Blog> {
 
     /**
      * 主页面获取博客
-     * @param categoryId
+     * @param dto
+     * @param userId
      * @return
      */
-    List<BlogVO> getBlogByCategoryId(Long categoryId, Long userId);
+    List<BlogVO> getBlogByCategoryId(BlogHomePageDTO dto, Long userId);
 
     /**
      * 查看博客详情

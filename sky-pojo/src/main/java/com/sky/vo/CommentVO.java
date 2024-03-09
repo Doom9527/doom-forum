@@ -59,4 +59,7 @@ public class CommentVO implements Serializable {
 
     @ApiModelProperty(value = "二级评论及其子回复")
     private List<CommentVO2> replyComments = new ArrayList<>();
+
+    @ApiModelProperty(value = "是否删除(这里的删除标记和之前相反): 0未删除 1删除")
+    private Integer status;
 }

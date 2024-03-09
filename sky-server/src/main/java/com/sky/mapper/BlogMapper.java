@@ -16,7 +16,7 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * @param userId
      * @return
      */
-    List<BlogVO> selectBlogDECSByLikes(@Param("categoryId") Long categoryId, @Param("userId") Long userId);
+    List<BlogVO> selectBlogDECSByLikes(@Param("categoryId") Long categoryId, @Param("userId") Long userId, @Param("title") String tile);
 
     /**
      * 主页点赞返回VO

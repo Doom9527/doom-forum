@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.MQInfo.BlogPublishInfo;
 import com.sky.constant.RabbitMQConstant;
 import com.sky.dto.BlogDTO;
+import com.sky.dto.BlogHomePageDTO;
 import com.sky.dto.BlogPageDTO;
 import com.sky.entity.*;
 import com.sky.mapper.BlogMapper;
@@ -98,12 +99,13 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     /**
      * 主页面获取博客
-     * @param categoryId
+     * @param dto
+     * @param userId
      * @return
      */
     @Override
-    public List<BlogVO> getBlogByCategoryId(Long categoryId, Long userId) {
-        List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(categoryId, userId);
+    public List<BlogVO> getBlogByCategoryId(BlogHomePageDTO dto, Long userId) {
+        List<BlogVO> vos = baseMapper.selectBlogDECSByLikes(dto.getCategoryId(), userId, dto.getTitle());
         return vos;
     }
 

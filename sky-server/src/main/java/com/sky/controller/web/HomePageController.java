@@ -2,13 +2,13 @@ package com.sky.controller.web;
 
 import cn.hutool.core.util.StrUtil;
 import com.sky.dto.BlogDTO;
+import com.sky.dto.BlogHomePageDTO;
 import com.sky.dto.BlogLikeDTO;
 import com.sky.result.Result;
 import com.sky.service.BlogService;
 import com.sky.service.CategoriesService;
 import com.sky.service.LikesService;
 import com.sky.utils.JwtUtils;
-import com.sky.vo.BlogDetailVO;
 import com.sky.vo.BlogVO;
 import com.sky.vo.CategoriesVO;
 import io.swagger.annotations.Api;
@@ -46,20 +46,20 @@ public class HomePageController {
     }
 
     @ApiOperation(value = "主界面获取博客, 这里不携带token访问的话就是游客页面, 看不到自己点赞过的文章")
-    @GetMapping("/blog/{categoryId}")
-    public Result<List<BlogVO>> getBlog(@PathVariable Long categoryId, HttpServletRequest request) {
+    @GetMapping("/blog")
+    public Result<List<BlogVO>> getBlog(@RequestBody BlogHomePageDTO dto, HttpServletRequest request) {
         long userId = 0L;
         if (StrUtil.isNotBlank(request.getHeader("token"))) {
             userId = Long.parseLong(JwtUtils.getUserId(request.getHeader("token")));
         }
-        List<BlogVO> vos = blogService.getBlogByCategoryId(categoryId, userId);
+        List<BlogVO> vos = blogService.getBlogByCategoryId(dto, userId);
         return Result.success(vos);
     }
 
     @ApiOperation(value = "发布博客, 需要携带token访问")
     @PostMapping("/blog")
     public Result<String> publishBlog(@ApiParam(value = "博客标题", required = true) @Valid @RequestParam("title") String title,
-                                      @ApiParam(value = "博客内容", required = true)@Valid @RequestParam("content") String content,
+                                      @ApiParam(value = "博客内容", required = true) @Valid @RequestParam("content") String content,
                                       @ApiParam(value = "博客分类id", required = true)@Valid @RequestParam("categoryId") Long categoryId,
                                       @RequestParam("picture")MultipartFile picture,
                                       HttpServletRequest request) {
