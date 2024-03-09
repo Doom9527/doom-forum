@@ -1,12 +1,13 @@
 package com.sky.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogDTO;
+import com.sky.dto.BlogPageDTO;
 import com.sky.entity.Blog;
-import com.sky.vo.BlogDetailVO;
-import com.sky.vo.BlogFavorVO;
-import com.sky.vo.BlogSentVO;
-import com.sky.vo.BlogVO;
+import com.sky.result.Result;
+import com.sky.vo.*;
 
 import java.util.List;
 
@@ -68,4 +69,11 @@ public interface BlogService extends IService<Blog> {
      * @return
      */
     boolean examineBlogById(Long id, Integer flag);
+
+    /**
+     * 管理员查看所有博客
+     * @param dto
+     * @return
+     */
+   IPage<BlogOPVO> getAllBlogsOP(Page<Blog> page, BlogPageDTO dto);
 }

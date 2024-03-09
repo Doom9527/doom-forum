@@ -2,10 +2,7 @@ package com.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sky.entity.Blog;
-import com.sky.vo.BlogDetailVO;
-import com.sky.vo.BlogFavorVO;
-import com.sky.vo.BlogSentVO;
-import com.sky.vo.BlogVO;
+import com.sky.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -45,4 +42,5 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * @return
      */
     List<BlogSentVO> selectBlogSent(Long userId);
+
 }

@@ -6,7 +6,6 @@ import com.sky.dto.CommentDTO;
 import com.sky.entity.Comment;
 import com.sky.entity.User;
 import com.sky.vo.CommentVO;
-
 import java.util.List;
 
 public interface CommentService extends IService<Comment> {
@@ -38,4 +37,17 @@ public interface CommentService extends IService<Comment> {
      * @return
      */
     User selectUserByCommentId(Long commentId);
+
+    /**
+     * 按id查讯博客评论条数
+     * @param postId
+     * @return
+     */
+    Long countComment(Long postId);
+
+    /**
+     * 查询所有有效的评论
+     * @return
+     */
+    List<Comment> getAllCommentAlives();
 }

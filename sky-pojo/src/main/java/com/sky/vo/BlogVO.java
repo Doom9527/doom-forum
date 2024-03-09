@@ -29,6 +29,12 @@ public class BlogVO implements Serializable {
     @ApiModelProperty(value = "作者名")
     private String authorName;
 
+    @ApiModelProperty(value = "分类id")
+    private Long categoryId;
+
+    @ApiModelProperty(value = "分类名")
+    private String categoryName;
+
     @JsonFormat(pattern = "用户头像地址")
     private String avatar;
 

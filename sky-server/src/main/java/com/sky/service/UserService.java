@@ -1,5 +1,7 @@
 package com.sky.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.PageDTO;
 import com.sky.entity.Problem;
@@ -65,9 +67,9 @@ public interface UserService extends IService<User> {
     boolean addAvatarURL(String url, Long id);
 
     /**
-     * 查找全部学生
-     * @param query
+     * 查看全部用户
+     * @param page
      * @return
      */
-    PageDTO<UserOPVO> selectAll(PageQuery query);
+    IPage<UserOPVO> selectAll(Page<User> page);
 }

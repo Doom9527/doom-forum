@@ -6,20 +6,13 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.BlogLikeDTO;
 import com.sky.entity.Likes;
 import com.sky.exception.IncorrectParameterException;
-import com.sky.mapper.BlogMapper;
 import com.sky.mapper.LikesMapper;
 import com.sky.service.LikesService;
-import com.sky.vo.BlogDetailVO;
-import com.sky.vo.BlogVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements LikesService {
-
-    @Autowired
-    private BlogMapper blogMapper;
 
     /**
      * 主界面点赞或取消点赞
@@ -69,5 +62,30 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
                 .eq(Likes::getUserId, userId);
         List<Likes> likes = baseMapper.selectList(wrapper);
         return likes;
+    }
+
+    /**
+     * 按博客id查询点赞条数
+     * @param postId
+     * @return
+     */
+    @Override
+    public Long selectLikesCount(Long postId) {
+        LambdaQueryWrapper<Likes> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Likes::getPostId, postId)
+                .eq(Likes::getStatus, 1);
+        Long counts = baseMapper.selectCount(wrapper);
+        return counts;
+    }
+
+    /**
+     * 查询所有有效的点赞记录
+     * @return
+     */
+    @Override
+    public List<Likes> getAllAliveLikes() {
+        LambdaQueryWrapper<Likes> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Likes::getStatus, 1);
+        return baseMapper.selectList(wrapper);
     }
 }

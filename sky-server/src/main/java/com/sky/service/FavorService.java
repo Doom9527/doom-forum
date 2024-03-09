@@ -3,8 +3,6 @@ package com.sky.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogFavorDTO;
 import com.sky.entity.Favor;
-import com.sky.entity.Likes;
-import com.sky.vo.BlogDetailVO;
 
 import java.util.List;
 
@@ -25,4 +23,17 @@ public interface FavorService extends IService<Favor> {
      * @return
      */
     List<Favor> selectBlogByDuoId(Long postId, Long userId);
+
+    /**
+     * 按博客id查询收藏数
+     * @param postId
+     * @return
+     */
+    Long selectBlogFavorCount(Long postId);
+
+    /**
+     * 查找所有有效的收藏
+     * @return
+     */
+    List<Favor> selectAllFavorsAlive();
 }

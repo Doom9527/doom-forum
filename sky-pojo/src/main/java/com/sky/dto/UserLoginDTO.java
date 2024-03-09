@@ -32,9 +32,6 @@ public class UserLoginDTO implements Serializable {
     @ApiModelProperty(value = "用户类型: 1用户 2游客 3管理员", required = true)
     private Character userType;
 
-    /**
-     * 验证码
-     */
     @NotBlank(message = "验证码为空")
     @ApiModelProperty(value = "验证码", required = true)
     private String code;

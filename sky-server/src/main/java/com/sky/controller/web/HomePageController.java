@@ -78,6 +78,6 @@ public class HomePageController {
     @PutMapping("/blog")
     public Result<String> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
-        return likesService.likeBlog(blogLikeDTO, Long.valueOf(userId)) ? Result.success("点赞成功") : Result.error("点赞失败");
+        return likesService.likeBlog(blogLikeDTO, Long.valueOf(userId)) ? Result.success("成功") : Result.error("失败");
     }
 }

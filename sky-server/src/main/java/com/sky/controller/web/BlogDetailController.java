@@ -51,7 +51,7 @@ public class BlogDetailController {
     @PutMapping("/favor")
     public Result<String> favor(@RequestBody BlogFavorDTO blogFavorDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
-        return favorService.favorBlogDetail(blogFavorDTO, Long.valueOf(userId)) ? Result.success("收藏成功") : Result.error("收藏失败");
+        return favorService.favorBlogDetail(blogFavorDTO, Long.valueOf(userId)) ? Result.success("成功") : Result.error("失败");
     }
 
     @ApiOperation(value = "按博客id获取评论")

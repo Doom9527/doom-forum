@@ -7,19 +7,13 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.BlogFavorDTO;
 import com.sky.entity.Favor;
 import com.sky.exception.IncorrectParameterException;
-import com.sky.mapper.BlogMapper;
 import com.sky.mapper.FavorMapper;
 import com.sky.service.FavorService;
-import com.sky.vo.BlogDetailVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements FavorService {
-
-    @Autowired
-    private BlogMapper blogMapper;
 
     /**
      * 收藏
@@ -71,5 +65,30 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
                 .eq(Favor::getUserId, userId);
         List<Favor> favors = baseMapper.selectList(wrapper);
         return favors;
+    }
+
+    /**
+     * 按博客id查询收藏数
+     * @param postId
+     * @return
+     */
+    @Override
+    public Long selectBlogFavorCount(Long postId) {
+        LambdaQueryWrapper<Favor> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Favor::getPostId, postId)
+                .eq(Favor::getStatus, 1);
+        Long count = baseMapper.selectCount(wrapper);
+        return count;
+    }
+
+    /**
+     * 查找所有有效的收藏
+     * @return
+     */
+    @Override
+    public List<Favor> selectAllFavorsAlive() {
+        LambdaQueryWrapper<Favor> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Favor::getStatus, 1);
+        return baseMapper.selectList(wrapper);
     }
 }

@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -155,16 +157,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 查找全部学生
-     * @param query
+     * 查看全部用户
+     * @param page
      * @return
      */
     @Override
-    public PageDTO<UserOPVO> selectAll(PageQuery query) {
-        Page<User> page = query.toMpPageDefaultSortByCreateTimeDesc();
-        page(page);
-        return PageDTO.of(page, UserOPVO.class);
+    public IPage<UserOPVO> selectAll(Page<User> page) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        Page<User> pages = baseMapper.selectPage(page, wrapper);
+        List<UserOPVO> vos = pages.getRecords().stream()
+                .map(user -> {
+                    UserOPVO vo = UserOPVO.builder()
+                            .id(user.getId())
+                            .userName(user.getUserName())
+                            .status(user.getStatus())
+                            .avatar(user.getAvatar())
+                            .userType(user.getUserType())
+                            .createTime(user.getCreateTime())
+                            .updateTime(user.getUpdateTime()).build();
+                    return vo;
+                }).collect(Collectors.toList());
+
+        IPage<UserOPVO> resultPage = new Page<>(page.getCurrent(), page.getSize());
+        resultPage.setCurrent(pages.getCurrent());
+        resultPage.setTotal(pages.getTotal());
+        resultPage.setRecords(vos);
+
+        return resultPage;
     }
-
-
 }

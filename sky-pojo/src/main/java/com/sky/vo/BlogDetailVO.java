@@ -33,6 +33,12 @@ public class BlogDetailVO implements Serializable {
     @ApiModelProperty(value = "作者名")
     private String authorName;
 
+    @ApiModelProperty(value = "分类id")
+    private Long categoryId;
+
+    @ApiModelProperty(value = "分类名")
+    private String categoryName;
+
     @JsonFormat(pattern = "用户头像地址")
     private String avatar;
 
@@ -47,4 +53,10 @@ public class BlogDetailVO implements Serializable {
 
     @ApiModelProperty(value = "评论数")
     private Integer commentCount;
+
+    @ApiModelProperty(value = "点赞状态: 0没点 1点了")
+    private Integer status1;
+
+    @ApiModelProperty(value = "收藏状态: 0没收 1收了")
+    private Integer status2;
 }

@@ -3,8 +3,6 @@ package com.sky.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.BlogLikeDTO;
 import com.sky.entity.Likes;
-import com.sky.vo.BlogDetailVO;
-import com.sky.vo.BlogVO;
 
 import java.util.List;
 
@@ -24,4 +22,17 @@ public interface LikesService extends IService<Likes> {
      * @return
      */
     List<Likes> selectBlogByDuoId(Long postId, Long userId);
+
+    /**
+     * 按博客id查询点赞条数
+     * @param postId
+     * @return
+     */
+    Long selectLikesCount(Long postId);
+
+    /**
+     * 查询所有有效的点赞记录
+     * @return
+     */
+    List<Likes> getAllAliveLikes();
 }

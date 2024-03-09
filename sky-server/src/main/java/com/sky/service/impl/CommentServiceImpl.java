@@ -13,7 +13,6 @@ import com.sky.vo.CommentVO;
 import com.sky.vo.CommentVO2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -142,5 +141,29 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public User selectUserByCommentId(Long commentId) {
         Comment comment = baseMapper.selectById(commentId);
         return userService.getUserById(comment.getUserId());
+    }
+
+    /**
+     * 按id查讯博客评论条数
+     * @param postId
+     * @return
+     */
+    @Override
+    public Long countComment(Long postId) {
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getPostId, postId);
+        Long count = baseMapper.selectCount(wrapper);
+        return count;
+    }
+
+    /**
+     * 查询所有有效的评论
+     * @return
+     */
+    @Override
+    public List<Comment> getAllCommentAlives() {
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getStatus, 0);
+        return baseMapper.selectList(wrapper);
     }
 }
