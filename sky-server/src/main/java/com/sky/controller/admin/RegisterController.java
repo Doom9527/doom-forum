@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin
 @Slf4j
 @Api(tags = "注册模块")
 @RestController

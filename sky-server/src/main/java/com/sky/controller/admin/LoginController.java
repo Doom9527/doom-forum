@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
-
+@CrossOrigin
 @Slf4j
 @Api(tags = "登录模块")
 @RestController

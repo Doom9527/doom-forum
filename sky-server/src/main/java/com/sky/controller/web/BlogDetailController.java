@@ -8,10 +8,8 @@ import com.sky.result.Result;
 import com.sky.service.BlogService;
 import com.sky.service.CommentService;
 import com.sky.service.FavorService;
-import com.sky.service.LikesService;
 import com.sky.utils.JwtUtils;
 import com.sky.vo.BlogDetailVO;
-import com.sky.vo.BlogFavorVO;
 import com.sky.vo.CommentVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin
 @Slf4j
 @RestController
 @Api(tags = "博客详情页面")

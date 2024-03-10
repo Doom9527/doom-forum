@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin
 @Slf4j
 @Api(tags = "用户信息模块")
 @RestController
