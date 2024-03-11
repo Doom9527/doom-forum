@@ -36,4 +36,6 @@ public class MessageConstant {
     public static final String LIKES_NULL = "未找到该点赞记录";
 
     public static final String INPUT_LIKE_ERROR = "传入参数有误";
+
+    public static final String INPUT_FOLLOW_ERROR = "不能关注自己";
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.UserMapper">
+
+    <select id="selectUserForFollow" resultType="com.sky.vo.UserFollowVO">
+        SELECT
+            u.id,
+            u.user_name,
+            u.avatar,
+            f.status AS status  -- 直接取出f.status作为结果
+        FROM
+            sys_follow f
+                LEFT JOIN
+            sys_user u ON u.id = f.follow_user_id
+        WHERE
+            f.status = 1 AND
+            f.user_id = #{userId}
+        ORDER BY
+            f.update_time DESC
+    </select>
+</mapper>

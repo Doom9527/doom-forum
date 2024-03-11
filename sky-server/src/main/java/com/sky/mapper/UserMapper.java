@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sky.entity.User;
+import com.sky.vo.UserFollowVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -18,4 +19,11 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT problem_id FROM sys_user_problem WHERE user_id = #{userId}")
     List<Long> findProblemIdsByUserId(Long userId);
+
+    /**
+     * 查看关注的用户
+     * @param userId
+     * @return
+     */
+    List<UserFollowVO> selectUserForFollow(Long userId);
 }

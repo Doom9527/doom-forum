@@ -6,12 +6,16 @@ import com.sky.dto.UserPageDTO;
 import com.sky.entity.User;
 import com.sky.result.Result;
 import com.sky.service.UserService;
+import com.sky.utils.JwtUtils;
+import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @CrossOrigin
 @Slf4j
@@ -23,11 +27,23 @@ public class UserOPController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "查看所有用户")
+    @ApiOperation(value = "管理员查看所有用户")
     @GetMapping
     public Result<IPage<UserOPVO>> getUsers(@RequestBody UserPageDTO dto) {
         Page<User> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
         IPage<UserOPVO> data = userService.selectAll(page);
         return Result.success(data);
     }
+
+    @ApiOperation(value = "用户查看自己关注的用户")
+    @GetMapping("/follow")
+    public Result<List<UserFollowVO>> getUsersFollowed(HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        List<UserFollowVO> vos = userService.getUserFollowed(userId);
+        return Result.success(vos);
+    }
+
+//    @ApiOperation(value = "用户查看另一个用户的详情")
+//    @GetMapping("/detail")
+//    public Result<>
 }

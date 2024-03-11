@@ -90,7 +90,14 @@
                          THEN 1 ELSE 0 END) AS status1,
             MAX(CASE WHEN f.status = 1
                 AND f.user_id = #{userId}
-                         THEN 1 ELSE 0 END) AS status2
+                         THEN 1 ELSE 0 END) AS status2,
+            MAX(CASE WHEN fo.status = 1
+                AND fo.user_id = #{userId}
+                         THEN 1 ELSE 0 END) AS status3,
+        CASE
+        WHEN u.id = #{userId} THEN 1
+        ELSE 0
+        END AS flag
         FROM
             sys_blog b
                 LEFT JOIN
@@ -103,6 +110,8 @@
             sys_user u ON b.author_id = u.id
                 LEFT JOIN
             sys_categories ct ON b.category_id = ct.id
+                LEFT JOIN
+            sys_follow fo ON u.id = fo.follow_user_id
         WHERE
             b.status = 1 AND
             b.examine = 1
@@ -117,31 +126,39 @@
 
     <select id="selectBlogDECSByDateTime" resultType="com.sky.vo.BlogFavorVO" parameterType="java.lang.Long">
         SELECT
-        b.id,
-        b.title,
-        b.picture,
-        u.avatar,
-        b.author_id AS authorId,
-        u.user_name AS authorName,
-        ct.id AS categoryId,
-        ct.name AS categoryName,
-        f.update_time AS updateTime,
-        f.status
+            b.id,
+            b.title,
+            b.picture,
+            u.avatar,
+            b.author_id AS authorId,
+            u.user_name AS authorName,
+            ct.id AS categoryId,
+            ct.name AS categoryName,
+            f.update_time AS updateTime,
+            f.status,
+            CASE
+                WHEN EXISTS(SELECT 1 FROM sys_follow WHERE user_id = #{userId} AND follow_user_id = u.id) THEN 1
+                ELSE 0
+                END AS status3,
+            CASE
+                WHEN u.id = #{userId} THEN 1
+                ELSE 0
+                END AS flag
         FROM
-        sys_blog b
-        LEFT JOIN
-        sys_favor f ON b.id = f.post_id
-        LEFT JOIN
-        sys_user u ON b.author_id = u.id
-        LEFT JOIN
-        sys_categories ct ON b.category_id = ct.id
+            sys_blog b
+                LEFT JOIN
+            sys_favor f ON b.id = f.post_id
+                LEFT JOIN
+            sys_user u ON b.author_id = u.id
+                LEFT JOIN
+            sys_categories ct ON b.category_id = ct.id
         WHERE
-        b.status = 1 AND
-        b.examine = 1 AND
-        f.status = 1 AND
-        f.user_id = #{userId}
+            b.status = 1 AND
+            b.examine = 1 AND
+            f.status = 1 AND
+            f.user_id = #{userId}
         ORDER BY
-        updateTime DESC
+            updateTime DESC
     </select>
 
     <select id="selectBlogSent" resultType="com.sky.vo.BlogSentVO" parameterType="java.lang.Long">

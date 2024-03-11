@@ -3,14 +3,15 @@ package com.sky.controller.web;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.entity.Blog;
-import com.sky.entity.User;
 import com.sky.result.Result;
 import com.sky.service.BlogService;
+import com.sky.service.UserService;
 import com.sky.utils.JwtUtils;
 import com.sky.vo.BlogFavorVO;
 import com.sky.vo.BlogOPVO;
 import com.sky.dto.BlogPageDTO;
 import com.sky.vo.BlogSentVO;
+import com.sky.vo.UserFollowVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,7 +47,6 @@ public class BlogOPController {
         return Result.success(vos);
     }
 
-    //TODO 未做完
     @ApiOperation(value = "管理员查看所有博客")
     @GetMapping("/all")
     public Result<IPage<BlogOPVO>> getAllBlogs(@RequestBody BlogPageDTO dto) {

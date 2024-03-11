@@ -74,7 +74,7 @@ public class HomePageController {
         return blogService.publishBlog(blogDTO) ? Result.success("发布成功，管理员审核中") : Result.error("发布失败");
     }
 
-    @ApiOperation(value = "点赞或取消点赞: 点过赞再点一下就会取消, 需要携带token访问")
+    @ApiOperation(value = "点赞或取消点赞: 点一下就会转换点赞状态, 需要携带token访问")
     @PutMapping("/blog")
     public Result<String> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));

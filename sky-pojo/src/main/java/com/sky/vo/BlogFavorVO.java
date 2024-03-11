@@ -43,10 +43,17 @@ public class BlogFavorVO implements Serializable {
     @JsonFormat(pattern = "博客图片地址")
     private String picture;
 
-    @ApiModelProperty(value = "收藏状态: 0没收藏 1收藏")
-    private Integer status;
-
     @ApiModelProperty(value = "收藏时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+
+    @ApiModelProperty(value = "收藏状态: 0没收藏 1收藏")
+    private Integer status;
+
+    @ApiModelProperty(value = "是不是自己, 是的话肯定就不显示关注了: 1是 0不是")
+    private Integer flag;
+
+    @ApiModelProperty(value = "关注状态: 0没关 1关了")
+    private Integer status3;
 }

@@ -7,6 +7,7 @@ import com.sky.dto.PageDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.result.PageQuery;
+import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
 
 import java.util.List;
@@ -72,4 +73,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     IPage<UserOPVO> selectAll(Page<User> page);
+
+    /**
+     * 查看关注列表
+     * @param userId
+     * @return
+     */
+    List<UserFollowVO> getUserFollowed(String userId);
 }

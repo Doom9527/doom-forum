@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 
 @Data
@@ -59,4 +58,10 @@ public class BlogDetailVO implements Serializable {
 
     @ApiModelProperty(value = "收藏状态: 0没收 1收了")
     private Integer status2;
+
+    @ApiModelProperty(value = "是不是自己, 是的话肯定就不显示关注了: 1是 0不是")
+    private Integer flag;
+
+    @ApiModelProperty(value = "关注状态: 0没关 1关了")
+    private Integer status3;
 }

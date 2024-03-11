@@ -8,15 +8,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.PageDTO;
+import com.sky.entity.Follow;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.exception.ObjectNullException;
 import com.sky.exception.PasswordErrorException;
+import com.sky.mapper.FollowMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.result.PageQuery;
+import com.sky.service.FollowService;
 import com.sky.service.ProblemService;
 import com.sky.service.UserService;
 import com.sky.utils.RedisCache;
+import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,5 +188,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         resultPage.setRecords(vos);
 
         return resultPage;
+    }
+
+    /**
+     * 查看关注列表
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<UserFollowVO> getUserFollowed(String userId) {
+        List<UserFollowVO> vos = baseMapper.selectUserForFollow(Long.valueOf(userId));
+        return vos;
     }
 }
