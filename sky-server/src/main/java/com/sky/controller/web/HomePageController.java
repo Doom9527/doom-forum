@@ -47,7 +47,15 @@ public class HomePageController {
 
     @ApiOperation(value = "主界面获取博客, 这里不携带token访问的话就是游客页面, 看不到自己点赞过的文章")
     @GetMapping("/blog")
-    public Result<List<BlogVO>> getBlog(@RequestBody BlogHomePageDTO dto, HttpServletRequest request) {
+    public Result<List<BlogVO>> getBlog(@ApiParam(value = "所属分类id", required = true) @Valid @RequestParam("categoryId") Long categoryId,
+                                        @ApiParam(value = "模糊查询标题,可以不传") @Valid @RequestParam("title") String title,
+                                        HttpServletRequest request) {
+        BlogHomePageDTO dto = BlogHomePageDTO.builder()
+                .categoryId(categoryId)
+                .build();
+        if (StrUtil.isNotBlank(title)) {
+            dto.setTitle(title);
+        }
         long userId = 0L;
         if (StrUtil.isNotBlank(request.getHeader("token"))) {
             userId = Long.parseLong(JwtUtils.getUserId(request.getHeader("token")));
@@ -61,7 +69,7 @@ public class HomePageController {
     public Result<String> publishBlog(@ApiParam(value = "博客标题", required = true) @Valid @RequestParam("title") String title,
                                       @ApiParam(value = "博客内容", required = true) @Valid @RequestParam("content") String content,
                                       @ApiParam(value = "博客分类id", required = true)@Valid @RequestParam("categoryId") Long categoryId,
-                                      @RequestParam("picture")MultipartFile picture,
+                                      @ApiParam(value = "图片", required = true) @Valid @RequestParam("picture")MultipartFile picture,
                                       HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         BlogDTO blogDTO = BlogDTO.builder()

@@ -25,7 +25,7 @@
         LEFT JOIN
         sys_categories ct ON b.category_id = ct.id
         WHERE
-        b.status = 1 AND
+        b.status = 0 AND
         b.examine = 1
         <if test="categoryId != null and categoryId != ''">
             AND b.category_id = #{categoryId}
