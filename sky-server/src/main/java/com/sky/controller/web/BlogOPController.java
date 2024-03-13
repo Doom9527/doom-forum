@@ -59,14 +59,25 @@ public class BlogOPController {
         return Result.success(data);
     }
 
-    @ApiOperation(value = "管理员审核博客, 需要携带token访问")
-    @PutMapping
-    public Result<String> examine(@ApiParam(value = "博客id", required = true) @RequestParam Long id,
-                                  @ApiParam(value = "审核标记: 1通过 0不通过", required = true) @RequestParam Integer flag) {
-        return blogService.examineBlogById(id, flag) ? Result.success("审核成功") : Result.error("审核失败");
+    @ApiOperation(value = "管理员通过审核博客, 需要携带token访问")
+    @PutMapping("/{ids}")
+    public Result<Integer> pass(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
+        return Result.success(blogService.passBlogById(ids));
     }
 
-    @ApiOperation(value = "删除博客, 需要携带token访问")
+    @ApiOperation(value = "管理员删除博客, 需要携带token访问")
+    @PutMapping("/delete2/{ids}")
+    public Result<Integer> delete(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
+        return Result.success(blogService.deleteBlogByIds(ids));
+    }
+
+    @ApiOperation(value = "管理员恢复删除的博客, 需要携带token访问")
+    @PutMapping("/recover/{ids}")
+    public Result<Integer> recover(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
+        return Result.success(blogService.recoverBlogByIds(ids));
+    }
+
+    @ApiOperation(value = "用户删除博客, 需要携带token访问")
     @DeleteMapping("/delete/{id}")
     public Result<String> delete(@ApiParam(value = "博客id", required = true) @PathVariable Long id, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));

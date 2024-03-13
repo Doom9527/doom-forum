@@ -65,17 +65,30 @@ public interface BlogService extends IService<Blog> {
     boolean deleteBlogById(Long id, Long userId);
 
     /**
-     * 按id审核博客
-     * @param id
-     * @param flag
-     * @return
-     */
-    boolean examineBlogById(Long id, Integer flag);
-
-    /**
      * 管理员查看所有博客
      * @param dto
      * @return
      */
     IPage<BlogOPVO> getAllBlogsOP(Page<Blog> page, BlogPageDTO dto);
+
+    /**
+     * 通过博客审核
+     * @param ids
+     * @return
+     */
+    Integer passBlogById(Long[] ids);
+
+    /**
+     * 批量删除博客
+     * @param ids
+     * @return
+     */
+    Integer deleteBlogByIds(Long[] ids);
+
+    /**
+     * 批量恢复
+     * @param ids
+     * @return
+     */
+    Integer recoverBlogByIds(Long[] ids);
 }

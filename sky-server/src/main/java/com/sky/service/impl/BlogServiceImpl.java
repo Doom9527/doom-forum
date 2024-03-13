@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -160,20 +160,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     /**
-     * 按id审核博客
-     * @param id
-     * @param flag
-     * @return
-     */
-    @Override
-    public boolean examineBlogById(Long id, Integer flag) {
-        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(Blog::getExamine, flag)
-                .eq(Blog::getId, id);
-        return baseMapper.update(null, wrapper) > 0;
-    }
-
-    /**
      * 管理员查看所有博客
      * @param dto
      * @return
@@ -251,5 +237,47 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         resultPage.setRecords(vos);
 
         return resultPage;
+    }
+
+    /**
+     * 通过博客审核
+     * @param ids
+     * @return
+     */
+    @Override
+    public Integer passBlogById(Long[] ids) {
+        List<Long> list = Arrays.asList(ids);
+        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.in(Blog::getId, list)
+                .set(Blog::getExamine, 1);
+        return baseMapper.update(null, wrapper);
+    }
+
+    /**
+     * 批量删除博客
+     * @param ids
+     * @return
+     */
+    @Override
+    public Integer deleteBlogByIds(Long[] ids) {
+        List<Long> list = Arrays.asList(ids);
+        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.in(Blog::getId, list)
+                .set(Blog::getStatus, 1);
+        return baseMapper.update(null, wrapper);
+    }
+
+    /**
+     * 批量恢复
+     * @param ids
+     * @return
+     */
+    @Override
+    public Integer recoverBlogByIds(Long[] ids) {
+        List<Long> list = Arrays.asList(ids);
+        LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.in(Blog::getId, list)
+                .set(Blog::getStatus, 0);
+        return baseMapper.update(null, wrapper);
     }
 }
