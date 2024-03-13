@@ -3,6 +3,7 @@ package com.sky.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ApiModel(value = "查看其它用户的详情VO")
 public class UserDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,7 +32,7 @@ public class UserDetailVO implements Serializable {
     private Long fansCount;
 
     @ApiModelProperty(value = "获赞与收藏")
-    private Long totalCount;
+    private Integer totalCount;
 
     @ApiModelProperty(value = "关注状态: 1关注 0未关注")
     private Integer status;

@@ -26,4 +26,18 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     List<UserFollowVO> selectUserForFollow(Long userId);
+
+    /**
+     * 查询用户的获赞与收藏数量
+     * @param userId
+     * @return
+     */
+    int selectUserTotalCount(Long userId);
+
+    /**
+     * 查询该用户粉丝
+     * @param userId
+     * @return
+     */
+    List<UserFollowVO> getFansByUserId(Long userId, Long myId);
 }

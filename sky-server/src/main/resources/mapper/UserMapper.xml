@@ -19,4 +19,36 @@
         ORDER BY
             f.update_time DESC
     </select>
+
+    <select id="selectUserTotalCount" resultType="int">
+        SELECT
+                (SELECT COUNT(*) FROM sys_likes WHERE post_id IN (
+                    SELECT id FROM sys_blog WHERE author_id = #{authorId}
+                )) +
+                (SELECT COUNT(*) FROM sys_favor WHERE post_id IN (
+                    SELECT id FROM sys_blog WHERE author_id = #{authorId}
+                ))
+    </select>
+    <select id="getFansByUserId" resultType="com.sky.vo.UserFollowVO">
+        SELECT
+            f.user_id,
+            u.user_name,
+            u.avatar,
+            CASE
+                WHEN f.status = 1 AND f.user_id = #{myId} THEN 1
+                ELSE 0
+                END AS status,
+            CASE
+                WHEN f.user_id = #{myId} THEN 1
+                ELSE 0
+                END AS flag
+        FROM
+            sys_follow f
+                JOIN
+            sys_user u ON f.user_id = u.id
+        WHERE
+            f.follow_user_id = #{userId}
+        ORDER BY
+            f.update_time DESC;
+    </select>
 </mapper>

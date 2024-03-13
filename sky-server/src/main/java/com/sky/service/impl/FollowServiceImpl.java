@@ -6,16 +6,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.UserFollowDTO;
 import com.sky.entity.Follow;
-import com.sky.entity.Likes;
 import com.sky.exception.IncorrectParameterException;
 import com.sky.mapper.FollowMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.FollowService;
+import com.sky.vo.UserFollowVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> implements FollowService {
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 关注或取消关注
@@ -61,14 +65,53 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     }
 
     /**
-     * 查询所有有效的关注记录
+     * 查询粉丝数
+     * @param userId
      * @return
      */
     @Override
-    public List<Follow> getAllAliveFollow(String userId) {
+    public Long countFansById(String userId) {
         LambdaQueryWrapper<Follow> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Follow::getStatus, 1)
-                .eq(Follow::getUserId, userId);
-        return baseMapper.selectList(wrapper);
+        wrapper.eq(Follow::getFollowUserId, userId)
+                .eq(Follow::getStatus, 1);
+        return baseMapper.selectCount(wrapper);
+    }
+
+    /**
+     * 查询关注数
+     * @param userId
+     * @return
+     */
+    @Override
+    public Long countFollowsById(String userId) {
+        LambdaQueryWrapper<Follow> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Follow::getUserId, userId)
+                .eq(Follow::getStatus, 1);
+        return baseMapper.selectCount(wrapper);
+    }
+
+    /**
+     * 按两个id查询收藏记录
+     * @param userId
+     * @param userFollowId
+     * @return
+     */
+    @Override
+    public Follow selectFollowByDuoId(Long userId, Long userFollowId) {
+        LambdaQueryWrapper<Follow> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Follow::getUserId, userId)
+                .eq(Follow::getFollowUserId, userFollowId);
+        return baseMapper.selectOne(wrapper);
+    }
+
+    /**
+     * 按id查询该用户粉丝
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<UserFollowVO> selectFansById(Long fansId, Long userId) {
+        List<UserFollowVO> vos = userMapper.getFansByUserId(fansId, userId);
+        return vos;
     }
 }

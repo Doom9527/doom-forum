@@ -77,5 +77,5 @@ public interface BlogService extends IService<Blog> {
      * @param dto
      * @return
      */
-   IPage<BlogOPVO> getAllBlogsOP(Page<Blog> page, BlogPageDTO dto);
+    IPage<BlogOPVO> getAllBlogsOP(Page<Blog> page, BlogPageDTO dto);
 }

@@ -50,4 +50,12 @@ public interface CommentService extends IService<Comment> {
      * @return
      */
     List<Comment> getAllCommentAlives();
+
+    /**
+     * 修改评论状态
+     * @param commentId
+     * @param status
+     * @return
+     */
+    boolean modifyComments(Integer commentId, Integer status);
 }

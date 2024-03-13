@@ -1,11 +1,15 @@
 package com.sky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.Comment2DTO;
 import com.sky.dto.CommentDTO;
 import com.sky.entity.Comment;
 import com.sky.entity.User;
+import com.sky.exception.IncorrectParameterException;
+import com.sky.exception.ObjectNullException;
 import com.sky.mapper.CommentMapper;
 import com.sky.service.CommentService;
 import com.sky.service.UserService;
@@ -32,8 +36,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public List<CommentVO> listComment(Long postId, Integer flag) {
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Comment::getPostId, postId)
-                .eq(Comment::getRootCommentId, 0)
-                .eq(Comment::getStatus, 0);
+                .eq(Comment::getRootCommentId, 0);
         if (flag == 1) {
             wrapper.orderByDesc(Comment::getCreateTime);
         }
@@ -166,5 +169,25 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Comment::getStatus, 0);
         return baseMapper.selectList(wrapper);
+    }
+
+    /**
+     * 修改评论状态
+     * @param commentId
+     * @param status
+     * @return
+     */
+    @Override
+    public boolean modifyComments(Integer commentId, Integer status) {
+        if (baseMapper.selectById(commentId) == null) {
+            throw new ObjectNullException(MessageConstant.PRODUCT_NULL);
+        }
+        if (status != 1 && status != 0) {
+            throw new IncorrectParameterException(MessageConstant.INPUT_LIKE_ERROR);
+        }
+        LambdaUpdateWrapper<Comment> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Comment::getId, commentId)
+                .set(Comment::getStatus, status);
+        return baseMapper.update(null, wrapper) > 0;
     }
 }

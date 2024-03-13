@@ -16,10 +16,9 @@ import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.FollowMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.result.PageQuery;
-import com.sky.service.FollowService;
-import com.sky.service.ProblemService;
-import com.sky.service.UserService;
+import com.sky.service.*;
 import com.sky.utils.RedisCache;
+import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
 import lombok.extern.slf4j.Slf4j;
@@ -42,13 +41,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private LikesService likesService;
+
+    @Autowired
+    private FavorService favorService;
+
+    @Autowired
+    private FollowService followService;
+
     @Override
     public List<User> getAllUsers() {
+        LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery()
+                .eq(User::getStatus, 0);
         //return userMapper.getAllUsers();
-        if (baseMapper.selectList(null).isEmpty()) {
+        if (baseMapper.selectList(wrapper).isEmpty()) {
             throw new ObjectNullException(MessageConstant.USER_IS_NULL);
         }
-        return baseMapper.selectList(null);
+        return baseMapper.selectList(wrapper);
     }
 
 
@@ -56,7 +66,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getUserByUserName(String userName) {
         //return userMapper.getUserByUserName(userName);
         LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery()
-                .eq(User::getUserName, userName);
+                .eq(User::getUserName, userName)
+                .eq(User::getStatus, 0);
 //        if (baseMapper.selectOne(wrapper) == null) {
 //            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
 //        }
@@ -80,7 +91,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserById(Long id) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getId, id);
+        wrapper.eq(User::getId, id)
+                .eq(User::getStatus, 0);
 //        if (baseMapper.selectOne(wrapper) == null) {
 //            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
 //        }
@@ -168,6 +180,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public IPage<UserOPVO> selectAll(Page<User> page) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getStatus, 0);
         Page<User> pages = baseMapper.selectPage(page, wrapper);
         List<UserOPVO> vos = pages.getRecords().stream()
                 .map(user -> {
@@ -199,5 +212,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<UserFollowVO> getUserFollowed(String userId) {
         List<UserFollowVO> vos = baseMapper.selectUserForFollow(Long.valueOf(userId));
         return vos;
+    }
+
+    /**
+     * 获取用户详情
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserDetailVO getUserDetail(Long userId, Long id) {
+        User user = getUserById(userId);
+        if (user == null) {
+            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
+        }
+        Long follows = followService.countFollowsById(String.valueOf(userId));
+        Long fans = followService.countFansById(String.valueOf(userId));
+        int totals = baseMapper.selectUserTotalCount(userId);
+        Follow follow = followService.selectFollowByDuoId(id, userId);
+        UserDetailVO vo = UserDetailVO.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .avatar(user.getAvatar())
+                .followCount(follows)
+                .fansCount(fans)
+                .totalCount(totals)
+                .status(0).build();
+        if (follow != null) {
+            vo.setStatus(1);
+        }
+        return vo;
     }
 }

@@ -25,5 +25,4 @@ public class UserFollowVO implements Serializable {
 
     @ApiModelProperty(value = "关注状态: 1关注 0未关注")
     private Integer status;
-
 }
