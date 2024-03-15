@@ -6,13 +6,19 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.BlogLikeDTO;
 import com.sky.entity.Likes;
 import com.sky.exception.IncorrectParameterException;
+import com.sky.exception.ObjectNullException;
 import com.sky.mapper.LikesMapper;
+import com.sky.service.BlogService;
 import com.sky.service.LikesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements LikesService {
+
+    @Autowired
+    private BlogService blogService;
 
     /**
      * 主界面点赞或取消点赞
@@ -21,6 +27,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
      */
     @Override
     public boolean likeBlog(BlogLikeDTO blogLikeDTO, Long userId) {
+        if (blogService.getAliveBlogById(blogLikeDTO.getPostId()) == null) {
+            throw new ObjectNullException(MessageConstant.BLOG_NULL);
+        }
         //判断是否有点赞记录
         List<Likes> likes = selectBlogByDuoId(blogLikeDTO.getPostId(), userId);
         if (likes.isEmpty()) { // 没有找到已存在的点赞记录

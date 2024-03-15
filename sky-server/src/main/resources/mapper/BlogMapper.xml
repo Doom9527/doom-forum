@@ -209,4 +209,70 @@
             b.update_time DESC;
     </select>
 
+    <select id="selectNewLikes" resultType="com.sky.vo.NoticeTotalVO">
+        SELECT
+            l.id,
+            l.user_id,
+            u.avatar,
+            u.user_name,
+            l.post_id,
+            b.picture,
+            l.update_time,
+            CASE
+                WHEN 1=1 THEN 1 ELSE 0 END AS flag,
+            CASE
+                WHEN EXISTS (
+                        SELECT 1
+                        FROM sys_follow f
+                        WHERE f.user_id = #{userId}
+                          AND f.follow_user_id = l.user_id
+                    ) THEN 1
+                ELSE 0
+                END AS status
+        FROM
+            sys_likes l
+                JOIN
+            sys_blog b ON l.post_id = b.id
+                JOIN
+            sys_user u ON l.user_id = u.id
+        WHERE
+            b.author_id = #{userId}
+          AND l.status = 1
+        ORDER BY
+            l.update_time DESC;
+    </select>
+
+    <select id="selectNewFavor" resultType="com.sky.vo.NoticeTotalVO">
+        SELECT
+            l.id,
+            l.user_id,
+            u.avatar,
+            u.user_name,
+            l.post_id,
+            b.picture,
+            l.update_time,
+            CASE
+                WHEN 1=1 THEN 0 ELSE 1 END AS flag,
+            CASE
+                WHEN EXISTS (
+                        SELECT 1
+                        FROM sys_follow f
+                        WHERE f.user_id = #{userId}
+                          AND f.follow_user_id = l.user_id
+                    ) THEN 1
+                ELSE 0
+                END AS status
+        FROM
+            sys_favor l
+                JOIN
+            sys_blog b ON l.post_id = b.id
+                JOIN
+            sys_user u ON l.user_id = u.id
+        WHERE
+            b.author_id = #{userId}
+          AND l.status = 1
+        ORDER BY
+            l.update_time DESC;
+    </select>
+
 </mapper>

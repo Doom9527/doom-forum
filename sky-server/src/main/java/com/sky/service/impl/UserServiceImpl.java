@@ -18,6 +18,7 @@ import com.sky.mapper.UserMapper;
 import com.sky.result.PageQuery;
 import com.sky.service.*;
 import com.sky.utils.RedisCache;
+import com.sky.vo.MyDetailVO;
 import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
@@ -40,12 +41,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisCache redisCache;
-
-    @Autowired
-    private LikesService likesService;
-
-    @Autowired
-    private FavorService favorService;
 
     @Autowired
     private FollowService followService;
@@ -240,6 +235,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (follow != null) {
             vo.setStatus(1);
         }
+        return vo;
+    }
+
+    /**
+     * 我的详情
+     * @return
+     */
+    @Override
+    public MyDetailVO getMyDetail(Long userId) {
+        User user = getUserById(userId);
+        if (user == null) {
+            throw new ObjectNullException(MessageConstant.USER_IS_NULL);
+        }
+        Long follows = followService.countFollowsById(String.valueOf(userId));
+        Long fans = followService.countFansById(String.valueOf(userId));
+        int totals = baseMapper.selectUserTotalCount(userId);
+        MyDetailVO vo =MyDetailVO.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .avatar(user.getAvatar())
+                .followCount(follows)
+                .fansCount(fans)
+                .totalCount(totals)
+                .build();
         return vo;
     }
 }

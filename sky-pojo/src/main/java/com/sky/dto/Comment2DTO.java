@@ -27,6 +27,6 @@ public class Comment2DTO implements Serializable {
     @ApiModelProperty(value = "回复评论id")
     private Long rootCommentId;
 
-    @ApiModelProperty(value = "回复谁的评论(二级可以不填)")
+    @ApiModelProperty(value = "回复谁的评论(如果你这个是二级评论就不填)")
     private Long parentId;
 }

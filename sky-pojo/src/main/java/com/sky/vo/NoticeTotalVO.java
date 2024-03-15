@@ -6,41 +6,44 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@ApiModel(description = "查看用户信息VO")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserOPVO implements Serializable {
+@ApiModel(value = "赞和收藏VO")
+public class NoticeTotalVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
     private Long id;
 
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
+
     @ApiModelProperty(value = "用户名")
     private String userName;
-
-    @ApiModelProperty(value = "账户状态: 0正常 1停用")
-    private String status;
 
     @ApiModelProperty(value = "头像")
     private String avatar;
 
-    @ApiModelProperty(value = "用户类型: 1普通 2游客 3管理员")
-    private String userType;
+    @ApiModelProperty(value = "博客id")
+    private Long postId;
 
-    @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    @ApiModelProperty(value = "博客图片")
+    private String picture;
 
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "赞还是收藏: 1赞 0收藏")
+    private Integer flag;
+
+    @ApiModelProperty(value = "是否为你的好友: 1是 0不是")
+    private Integer status;
+
+    @ApiModelProperty(value = "时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;

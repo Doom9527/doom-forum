@@ -3,15 +3,18 @@ package com.sky.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "关注用户VO")
-public class UserFollowVO implements Serializable {
+@Builder
+@ApiModel(value = "我的详情VO")
+public class MyDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
@@ -23,6 +26,12 @@ public class UserFollowVO implements Serializable {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
-    @ApiModelProperty(value = "关注状态: 1互相关注 0未关注")
-    private Integer status;
+    @ApiModelProperty(value = "关注数")
+    private Long followCount;
+
+    @ApiModelProperty(value = "粉丝数")
+    private Long fansCount;
+
+    @ApiModelProperty(value = "获赞与收藏")
+    private Integer totalCount;
 }

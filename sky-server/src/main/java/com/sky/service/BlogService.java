@@ -91,4 +91,18 @@ public interface BlogService extends IService<Blog> {
      * @return
      */
     Integer recoverBlogByIds(Long[] ids);
+
+    /**
+     * 查看新增赞和收藏
+     * @param userId
+     * @return
+     */
+    List<NoticeTotalVO> getNewLikeAndFavor(Long userId);
+
+    /**
+     * 按id查询有效的博客
+     * @param postId
+     * @return
+     */
+    Blog getAliveBlogById(Long postId);
 }

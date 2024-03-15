@@ -7,6 +7,7 @@ import com.sky.dto.PageDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.result.PageQuery;
+import com.sky.vo.MyDetailVO;
 import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
@@ -88,4 +89,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     UserDetailVO getUserDetail(Long userId, Long id);
+
+    /**
+     * 我的详情
+     * @return
+     */
+    MyDetailVO getMyDetail(Long userId);
 }

@@ -7,13 +7,19 @@ import com.sky.constant.MessageConstant;
 import com.sky.dto.BlogFavorDTO;
 import com.sky.entity.Favor;
 import com.sky.exception.IncorrectParameterException;
+import com.sky.exception.ObjectNullException;
 import com.sky.mapper.FavorMapper;
+import com.sky.service.BlogService;
 import com.sky.service.FavorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements FavorService {
+
+    @Autowired
+    private BlogService blogService;
 
     /**
      * 收藏
@@ -23,6 +29,9 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
      */
     @Override
     public boolean favorBlogDetail(BlogFavorDTO blogFavorDTO, Long userId) {
+        if (blogService.getAliveBlogById(blogFavorDTO.getPostId()) == null) {
+            throw new ObjectNullException(MessageConstant.BLOG_NULL);
+        }
         //判断是否有收藏记录
         List<Favor> likes = selectBlogByDuoId(blogFavorDTO.getPostId(), userId);
         if (likes.isEmpty()) { // 没有找到已存在的收藏记录

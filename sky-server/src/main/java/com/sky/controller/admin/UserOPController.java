@@ -8,6 +8,7 @@ import com.sky.result.Result;
 import com.sky.service.FollowService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtils;
+import com.sky.vo.MyDetailVO;
 import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
@@ -48,7 +49,15 @@ public class UserOPController {
         return Result.success(vos);
     }
 
-    @ApiOperation(value = "查看另一个用户的详情, 携带token")
+    @ApiOperation(value = "查看我的详情, 携带token")
+    @GetMapping("/myDetail")
+    public Result<MyDetailVO> getUserDetail(HttpServletRequest request) {
+        String id = JwtUtils.getUserId(request.getHeader("token"));
+        MyDetailVO vo = userService.getMyDetail(Long.valueOf(id));
+        return Result.success(vo);
+    }
+
+    @ApiOperation(value = "查看其它用户详情, 携带token")
     @GetMapping("/detail/{userId}")
     public Result<UserDetailVO> getUserDetail(@PathVariable Long userId, HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
@@ -56,13 +65,6 @@ public class UserOPController {
         return Result.success(vo);
     }
 
-    @ApiOperation(value = "查看该用户粉丝, 携带token")
-    @GetMapping("/fans/{userId}")
-    public Result<List<UserFollowVO>> getUserFans(@PathVariable Long userId, HttpServletRequest request) {
-        String id = JwtUtils.getUserId(request.getHeader("token"));
-        List<UserFollowVO> vos = followService.selectFansById(userId, Long.valueOf(id));
-        return Result.success(vos);
-    }
     @ApiOperation(value = "查看自己的粉丝, 携带token")
     @GetMapping("/myFans")
     public Result<List<UserFollowVO>> getUserFans(HttpServletRequest request) {

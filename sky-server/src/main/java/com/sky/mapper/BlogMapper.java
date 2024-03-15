@@ -41,6 +41,19 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * @param userId
      * @return
      */
-    List<BlogSentVO> selectBlogSent(Long userId);
+    List<BlogSentVO> selectBlogSent(@Param("userId") Long userId);
 
+    /**
+     * 查看新增的赞
+     * @param userId
+     * @return
+     */
+    List<NoticeTotalVO> selectNewLikes(@Param("userId") Long userId);
+
+    /**
+     * 查看新增的收藏
+     * @param userId
+     * @return
+     */
+    List<NoticeTotalVO> selectNewFavor(@Param("userId") Long userId);
 }

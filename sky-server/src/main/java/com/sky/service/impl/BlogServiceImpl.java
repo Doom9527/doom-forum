@@ -20,11 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -279,5 +278,34 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         wrapper.in(Blog::getId, list)
                 .set(Blog::getStatus, 0);
         return baseMapper.update(null, wrapper);
+    }
+
+    /**
+     * 查看新增赞和收藏
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<NoticeTotalVO> getNewLikeAndFavor(Long userId) {
+        List<NoticeTotalVO> list1 = baseMapper.selectNewLikes(userId);
+        List<NoticeTotalVO> list2 = baseMapper.selectNewFavor(userId);
+        List<NoticeTotalVO> vos = Stream.concat(list1.stream(), list2.stream())
+                .sorted(Comparator.comparing(NoticeTotalVO::getUpdateTime).reversed())
+                .collect(Collectors.toList());
+        return vos;
+    }
+
+    /**
+     * 按id查询有效的博客
+     * @param postId
+     * @return
+     */
+    @Override
+    public Blog getAliveBlogById(Long postId) {
+        LambdaQueryWrapper<Blog> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Blog::getId, postId)
+                .eq(Blog::getStatus, 0)
+                .eq(Blog::getExamine, 1);
+        return baseMapper.selectOne(wrapper);
     }
 }

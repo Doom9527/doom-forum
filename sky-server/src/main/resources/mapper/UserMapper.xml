@@ -31,24 +31,27 @@
     </select>
     <select id="getFansByUserId" resultType="com.sky.vo.UserFollowVO">
         SELECT
-            f.user_id,
+            f1.follow_user_id AS id,
             u.user_name,
             u.avatar,
+            f1.update_time,
             CASE
-                WHEN f.status = 1 AND f.user_id = #{myId} THEN 1
+                WHEN EXISTS (
+                        SELECT 1
+                        FROM sys_follow f2
+                        WHERE f2.user_id = f1.follow_user_id
+                          AND f2.follow_user_id = #{myId}
+                    ) THEN 1
                 ELSE 0
-                END AS status,
-            CASE
-                WHEN f.user_id = #{myId} THEN 1
-                ELSE 0
-                END AS flag
+                END AS status
         FROM
-            sys_follow f
+            sys_follow f1
                 JOIN
-            sys_user u ON f.user_id = u.id
+            sys_user u ON f1.follow_user_id = u.id
         WHERE
-            f.follow_user_id = #{userId}
+            f1.user_id = #{userId}
+          AND f1.status = 1
         ORDER BY
-            f.update_time DESC;
+            f1.update_time DESC;
     </select>
 </mapper>
