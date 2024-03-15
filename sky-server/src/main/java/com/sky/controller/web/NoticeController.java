@@ -2,8 +2,10 @@ package com.sky.controller.web;
 
 import com.sky.result.Result;
 import com.sky.service.BlogService;
+import com.sky.service.CommentService;
 import com.sky.service.FollowService;
 import com.sky.utils.JwtUtils;
+import com.sky.vo.NoticeCommentVO;
 import com.sky.vo.NoticeTotalVO;
 import com.sky.vo.UserFollowVO;
 import io.swagger.annotations.Api;
@@ -27,6 +29,9 @@ public class NoticeController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private CommentService commentService;
+
     @ApiOperation(value = "查看新增关注, 携带token")
     @GetMapping("/follow")
     public Result<List<UserFollowVO>> getUserFans(HttpServletRequest request) {
@@ -43,11 +48,11 @@ public class NoticeController {
         return Result.success(vos);
     }
 
-//    @ApiOperation(value = "查看新增评论, 携带token")
-//    @GetMapping("/total")
-//    public Result<List<NoticeCommentVO>> getComment(HttpServletRequest request) {
-//        String id = JwtUtils.getUserId(request.getHeader("token"));
-//        List<NoticeTotalVO> vos = blogService.getNewLikeAndFavor(Long.valueOf(id));
-//        return Result.success(vos);
-//    }
+    @ApiOperation(value = "查看新增评论, 携带token")
+    @GetMapping("/comment")
+    public Result<List<NoticeCommentVO>> getComment(HttpServletRequest request) {
+        String id = JwtUtils.getUserId(request.getHeader("token"));
+        List<NoticeCommentVO> vos = commentService.getNewComment(Long.valueOf(id));
+        return Result.success(vos);
+    }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.CommentMapper">
+    <select id="selectNoticeCommentsBlog" resultType="com.sky.vo.NoticeCommentVO">
+        SELECT
+            CASE
+                WHEN 1=1 THEN 1 ELSE 0 END AS flag,
+            c.id as newId,
+            c.content as newContent,
+            c.root_comment_id,
+            c.user_id,
+            c.user_name,
+            u.avatar,
+            c.post_id,
+            b.picture,
+            c.update_time,
+            CASE
+                WHEN b.author_id = c.user_id THEN 1
+                ELSE 0
+                END AS status
+        FROM
+            sys_comment c
+                JOIN
+            sys_blog b ON c.post_id = b.id
+                JOIN
+            sys_user u ON c.user_id = u.id
+        WHERE
+            b.author_id = #{userId}
+          and c.user_id != #{userId}
+          and c.root_comment_id = 0
+          and c.status = 0
+        ORDER BY
+            c.update_time DESC;
+    </select>
+    <select id="selectNoticeCommentsComment" resultType="com.sky.vo.NoticeCommentVO">
+        SELECT
+            CASE
+                WHEN 1=1 THEN 0 ELSE 1 END AS flag,
+            c.id as newId,
+            c.content as newContent,
+            c.root_comment_id,
+            c.user_id,
+            c.user_name,
+            u.avatar,
+            c.post_id,
+            b.picture,
+            c.update_time,
+            c2.id as oldId,
+            c2.content as oldContent,
+            CASE
+                WHEN b.author_id = c.user_id THEN 1
+                ELSE 0
+                END AS status
+        FROM
+            sys_comment c
+                JOIN
+            sys_blog b ON c.post_id = b.id
+                JOIN
+            sys_user u ON c.user_id = u.id
+                LEFT JOIN sys_comment c2 ON c.parent_id = c2.id
+        WHERE
+            b.author_id = #{userId}
+          and c.user_id != #{userId}
+          and c.root_comment_id != 0
+          and c.status = 0
+          and c2.user_id = #{userId}
+        ORDER BY
+            c.update_time DESC;
+    </select>
+</mapper>

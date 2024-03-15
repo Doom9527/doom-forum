@@ -170,6 +170,7 @@
             b.author_id AS authorId,
             u.user_name AS authorName,
             b.examine,
+            b.status,
             ct.id AS categoryId,
             ct.name AS categoryName,
             COALESCE(L.like_count, 0) AS like_count,
@@ -194,7 +195,7 @@
                 LEFT JOIN
             sys_categories ct ON b.category_id = ct.id
         WHERE
-            b.status = 1 AND
+            b.status = 0 AND
             b.examine = 1 AND
             b.author_id = #{userId}
         GROUP BY

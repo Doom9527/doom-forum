@@ -6,6 +6,8 @@ import com.sky.dto.CommentDTO;
 import com.sky.entity.Comment;
 import com.sky.entity.User;
 import com.sky.vo.CommentVO;
+import com.sky.vo.NoticeCommentVO;
+
 import java.util.List;
 
 public interface CommentService extends IService<Comment> {
@@ -58,4 +60,11 @@ public interface CommentService extends IService<Comment> {
      * @return
      */
     boolean modifyComments(Integer commentId, Integer status);
+
+    /**
+     * 获取通知中的评论
+     * @param valueOf
+     * @return
+     */
+    List<NoticeCommentVO> getNewComment(Long valueOf);
 }

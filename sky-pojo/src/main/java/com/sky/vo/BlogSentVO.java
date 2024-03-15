@@ -52,4 +52,7 @@ public class BlogSentVO implements Serializable {
 
     @ApiModelProperty(value = "审核状态: 0没通过 1通过")
     private Integer examine;
+
+    @ApiModelProperty(value = "审核状态: 0没删除 1删除")
+    private Integer status;
 }

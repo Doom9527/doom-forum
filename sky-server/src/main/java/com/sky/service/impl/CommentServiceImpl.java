@@ -15,12 +15,15 @@ import com.sky.service.CommentService;
 import com.sky.service.UserService;
 import com.sky.vo.CommentVO;
 import com.sky.vo.CommentVO2;
+import com.sky.vo.NoticeCommentVO;
+import com.sky.vo.NoticeTotalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
@@ -189,5 +192,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         wrapper.eq(Comment::getId, commentId)
                 .set(Comment::getStatus, status);
         return baseMapper.update(null, wrapper) > 0;
+    }
+
+    /**
+     * 获取通知中的评论
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<NoticeCommentVO> getNewComment(Long userId) {
+        List<NoticeCommentVO> list1 = baseMapper.selectNoticeCommentsBlog(userId);
+        List<NoticeCommentVO> list2 = baseMapper.selectNoticeCommentsComment(userId);
+        List<NoticeCommentVO> vos = Stream.concat(list1.stream(), list2.stream())
+                .sorted(Comparator.comparing(NoticeCommentVO::getUpdateTime).reversed())
+                .collect(Collectors.toList());
+        return vos;
     }
 }
