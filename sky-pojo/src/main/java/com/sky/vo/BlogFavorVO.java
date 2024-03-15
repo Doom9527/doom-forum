@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@ApiModel(description = "收藏博客模型")
+@ApiModel(description = "返回的收藏博客模型(点赞通用)")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,29 +31,13 @@ public class BlogFavorVO implements Serializable {
     @ApiModelProperty(value = "作者名")
     private String authorName;
 
-    @ApiModelProperty(value = "分类id")
-    private Long categoryId;
-
-    @ApiModelProperty(value = "分类名")
-    private String categoryName;
-
     @JsonFormat(pattern = "用户头像地址")
     private String avatar;
 
     @JsonFormat(pattern = "博客图片地址")
     private String picture;
 
-    @ApiModelProperty(value = "收藏时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
-
-
-    @ApiModelProperty(value = "收藏状态: 0没收藏 1收藏")
+    @ApiModelProperty(value = "收藏状态: 0没收藏 1收藏 / 或点赞状态")
     private Integer status;
 
-    @ApiModelProperty(value = "是不是自己, 是的话肯定就不显示关注了: 1是 0不是")
-    private Integer flag;
-
-    @ApiModelProperty(value = "关注状态: 0没关 1关了")
-    private Integer status3;
 }

@@ -1,6 +1,7 @@
 package com.sky.controller.web;
 
 import com.sky.dto.*;
+import com.sky.exception.ObjectNullException;
 import com.sky.result.Result;
 import com.sky.service.BlogService;
 import com.sky.service.CommentService;
@@ -40,10 +41,19 @@ public class BlogDetailController {
     private FollowService followService;
 
     @ApiOperation(value = "查看博客详情")
-    @GetMapping("/{blogId}")
+    @GetMapping("/detail/{blogId}")
     public Result<BlogDetailVO> getDetail(@PathVariable Long blogId, HttpServletRequest request) {
-        String userId = JwtUtils.getUserId(request.getHeader("token"));
-        BlogDetailVO vo = blogService.getBlogByBlogId(Long.valueOf(userId), blogId);
+
+        if (blogService.getAliveBlogById(blogId) == null) {
+            return Result.error("该博客不存在");
+        }
+        long userId;
+        if (JwtUtils.getUserId(request.getHeader("token")) == null) {
+            userId = 4L;
+        } else {
+            userId = Long.parseLong(JwtUtils.getUserId(request.getHeader("token")));
+        }
+        BlogDetailVO vo = blogService.getBlogByBlogId(userId, blogId);
         return Result.success(vo);
     }
 

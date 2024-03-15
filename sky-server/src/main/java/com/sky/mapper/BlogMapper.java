@@ -34,7 +34,13 @@ public interface BlogMapper extends BaseMapper<Blog> {
     /**
      * 查看收藏的博客
      */
-    List<BlogFavorVO> selectBlogDECSByDateTime(@Param("userId") Long userId);
+    List<BlogFavorVO> selectBlogFavorDECSByDateTime(@Param("userId") Long userId);
+
+    /**
+     * 查看点赞的博客
+     */
+    List<BlogFavorVO> selectBlogLikeDECSByDateTime(@Param("userId") Long userId);
+
 
     /**
      * 查看发过的博客

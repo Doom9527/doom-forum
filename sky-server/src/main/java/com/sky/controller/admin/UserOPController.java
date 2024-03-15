@@ -1,19 +1,14 @@
 package com.sky.controller.admin;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sky.dto.UserPageDTO;
-import com.sky.entity.User;
 import com.sky.result.Result;
+import com.sky.service.BlogService;
 import com.sky.service.FollowService;
 import com.sky.service.UserService;
 import com.sky.utils.JwtUtils;
-import com.sky.vo.MyDetailVO;
-import com.sky.vo.UserDetailVO;
-import com.sky.vo.UserFollowVO;
-import com.sky.vo.UserOPVO;
+import com.sky.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin
 @Slf4j
-@Api(tags = "用户管理模块")
+@Api(tags = "用户主界面")
 @RestController
 @RequestMapping("/userOP")
 public class UserOPController {
@@ -33,13 +28,8 @@ public class UserOPController {
     @Autowired
     private FollowService followService;
 
-    @ApiOperation(value = "管理员查看所有用户, 携带token")
-    @GetMapping
-    public Result<IPage<UserOPVO>> getUsers(@RequestBody UserPageDTO dto) {
-        Page<User> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
-        IPage<UserOPVO> data = userService.selectAll(page);
-        return Result.success(data);
-    }
+    @Autowired
+    private BlogService blogService;
 
     @ApiOperation(value = "查看自己关注的用户, 携带token")
     @GetMapping("/follow")
@@ -71,5 +61,36 @@ public class UserOPController {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<UserFollowVO> vos = followService.selectFansById(Long.valueOf(id), Long.valueOf(id));
         return Result.success(vos);
+    }
+
+    @ApiOperation(value = "查看自己收藏过的博客, 需要携带token访问")
+    @GetMapping("/favor")
+    public Result<List<BlogFavorVO>> getFavor(HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        List<BlogFavorVO> vos = blogService.getBlogForFavor(Long.valueOf(userId));
+        return Result.success(vos);
+    }
+
+    @ApiOperation(value = "查看自己点赞过的博客, 需要携带token访问")
+    @GetMapping("/likes")
+    public Result<List<BlogFavorVO>> getLike(HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        List<BlogFavorVO> vos = blogService.getBlogForFavor(Long.valueOf(userId));
+        return Result.success(vos);
+    }
+
+    @ApiOperation(value = "查看自己发的博客, 需要携带token访问")
+    @GetMapping
+    public Result<List<BlogSentVO>> getBlogSent(HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        List<BlogSentVO> vos = blogService.getBlogSent(Long.valueOf(userId));
+        return Result.success(vos);
+    }
+
+    @ApiOperation(value = "用户删除博客, 需要携带token访问")
+    @DeleteMapping("/delete/{id}")
+    public Result<String> delete(@ApiParam(value = "博客id", required = true) @PathVariable Long id, HttpServletRequest request) {
+        String userId = JwtUtils.getUserId(request.getHeader("token"));
+        return blogService.deleteBlogById(id, Long.valueOf(userId)) ? Result.success("删除成功") : Result.error("删除失败");
     }
 }

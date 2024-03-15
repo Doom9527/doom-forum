@@ -126,7 +126,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
      */
     @Override
     public List<BlogFavorVO> getBlogForFavor(Long userId) {
-        List<BlogFavorVO> vos = baseMapper.selectBlogDECSByDateTime(userId);
+        List<BlogFavorVO> vos = baseMapper.selectBlogFavorDECSByDateTime(userId);
+        return vos;
+    }
+
+    /**
+     * 查看点赞的博客
+     */
+    @Override
+    public List<BlogFavorVO> getBlogForLike(Long userId) {
+        List<BlogFavorVO> vos = baseMapper.selectBlogLikeDECSByDateTime(userId);
         return vos;
     }
 

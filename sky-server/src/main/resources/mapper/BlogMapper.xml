@@ -62,7 +62,7 @@
         LEFT JOIN
         sys_categories ct ON b.category_id = ct.id
         WHERE
-        b.status = 1 AND
+        b.status = 0 AND
         b.examine = 1 AND
         b.id = #{postId}
         GROUP BY
@@ -113,7 +113,7 @@
                 LEFT JOIN
             sys_follow fo ON u.id = fo.follow_user_id
         WHERE
-            b.status = 1 AND
+            b.status = 0 AND
             b.examine = 1
         <if test="postId != null and postId !=''">
             AND b.id = #{postId}
@@ -124,7 +124,7 @@
             like_count DESC
     </select>
 
-    <select id="selectBlogDECSByDateTime" resultType="com.sky.vo.BlogFavorVO" parameterType="java.lang.Long">
+    <select id="selectBlogFavorDECSByDateTime" resultType="com.sky.vo.BlogFavorVO" parameterType="java.lang.Long">
         SELECT
             b.id,
             b.title,
@@ -132,33 +132,44 @@
             u.avatar,
             b.author_id AS authorId,
             u.user_name AS authorName,
-            ct.id AS categoryId,
-            ct.name AS categoryName,
-            f.update_time AS updateTime,
-            f.status,
-            CASE
-                WHEN EXISTS(SELECT 1 FROM sys_follow WHERE user_id = #{userId} AND follow_user_id = u.id) THEN 1
-                ELSE 0
-                END AS status3,
-            CASE
-                WHEN u.id = #{userId} THEN 1
-                ELSE 0
-                END AS flag
+            f.status
         FROM
             sys_blog b
                 LEFT JOIN
             sys_favor f ON b.id = f.post_id
                 LEFT JOIN
             sys_user u ON b.author_id = u.id
-                LEFT JOIN
-            sys_categories ct ON b.category_id = ct.id
         WHERE
-            b.status = 1 AND
+            b.status = 0 AND
             b.examine = 1 AND
             f.status = 1 AND
             f.user_id = #{userId}
         ORDER BY
-            updateTime DESC
+            b.update_time DESC
+    </select>
+
+    <select id="selectBlogLikeDECSByDateTime" resultType="com.sky.vo.BlogFavorVO">
+        SELECT
+            b.id,
+            b.title,
+            b.picture,
+            u.avatar,
+            b.author_id AS authorId,
+            u.user_name AS authorName,
+            f.status
+        FROM
+            sys_blog b
+                LEFT JOIN
+            sys_likes f ON b.id = f.post_id
+                LEFT JOIN
+            sys_user u ON b.author_id = u.id
+        WHERE
+            b.status = 0 AND
+            b.examine = 1 AND
+            f.status = 1 AND
+            f.user_id = #{userId}
+        ORDER BY
+            b.update_time DESC
     </select>
 
     <select id="selectBlogSent" resultType="com.sky.vo.BlogSentVO" parameterType="java.lang.Long">

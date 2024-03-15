@@ -51,6 +51,11 @@ public interface BlogService extends IService<Blog> {
     List<BlogFavorVO> getBlogForFavor(Long userId);
 
     /**
+     * 查看点赞的博客
+     */
+    List<BlogFavorVO> getBlogForLike(Long userId);
+
+    /**
      * 查看发过的博客
      * @param userId
      * @return
