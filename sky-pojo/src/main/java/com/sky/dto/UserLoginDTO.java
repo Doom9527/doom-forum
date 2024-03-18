@@ -30,7 +30,7 @@ public class UserLoginDTO implements Serializable {
 
     @NotNull(message = "用户类型为空")
     @ApiModelProperty(value = "用户类型: 1用户 3管理员", required = true)
-    private Character userType;
+    private String userType;
 
     @NotBlank(message = "验证码为空")
     @ApiModelProperty(value = "验证码", required = true)

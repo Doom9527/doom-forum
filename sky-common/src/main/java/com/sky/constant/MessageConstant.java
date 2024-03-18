@@ -38,4 +38,6 @@ public class MessageConstant {
     public static final String INPUT_LIKE_ERROR = "传入参数有误";
 
     public static final String INPUT_FOLLOW_ERROR = "不能关注自己";
+
+    public static final String USER_TYPE_ERROR = "用户类型错误";
 }

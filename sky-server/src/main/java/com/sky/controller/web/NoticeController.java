@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -34,6 +35,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看新增关注, 携带token")
     @GetMapping("/follow")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public Result<List<UserFollowVO>> getUserFans(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<UserFollowVO> vos = followService.selectFansById(Long.valueOf(id), Long.valueOf(id));
@@ -42,6 +44,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看赞和收藏, 携带token")
     @GetMapping("/total")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public Result<List<NoticeTotalVO>> getTotal(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<NoticeTotalVO> vos = blogService.getNewLikeAndFavor(Long.valueOf(id));
@@ -50,6 +53,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看新增评论, 携带token")
     @GetMapping("/comment")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public Result<List<NoticeCommentVO>> getComment(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<NoticeCommentVO> vos = commentService.getNewComment(Long.valueOf(id));

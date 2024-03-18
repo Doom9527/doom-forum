@@ -56,6 +56,11 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.isNull(authenticate)){
             throw new UserNameOrPasswordErrorException(MessageConstant.USERNAMEORPASSWORD_ERROR);
         }
+        //查询用户信息
+        User userByUserName = userService.getUserByUserName(user.getUserName());
+        if (!userByUserName.getUserType().equals(userLoginDTO.getUserType())) {
+            throw new LoginFailedException(MessageConstant.USER_TYPE_ERROR);
+        }
         //使用userid生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         String userId = loginUser.getUser().getId().toString();
@@ -69,6 +74,7 @@ public class LoginServiceImpl implements LoginService {
                 .id(Long.valueOf(userId))
                 .userName(loginUser.getUsername())
                 .token(token)
+                .userType(userByUserName.getUserType())
                 .avatar(userService.getUserById(Long.valueOf(userId)).getAvatar())
                 .build();
         return userLoginVO;

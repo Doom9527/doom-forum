@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于登录注册接口 允许匿名访问
                 .antMatchers("/user/login", "/user/register", "/user/getCaptcha",
                         "/user/check2/**", "/user/check2", "/user/modify2",
-                        "/home/blog/**", "/home/cate", "/detail/detail/**",
+                        "/home/blog/**", "/home/cate", "/detail/blog/**",
                         "/detail/comment").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**","/v2/api-docs/**").permitAll()

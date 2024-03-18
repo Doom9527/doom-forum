@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +67,7 @@ public class HomePageController {
 
     @ApiOperation(value = "发布博客, 需要携带token访问")
     @PostMapping("/blog")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public Result<String> publishBlog(@ApiParam(value = "博客标题", required = true) @Valid @RequestParam("title") String title,
                                       @ApiParam(value = "博客内容", required = true) @Valid @RequestParam("content") String content,
                                       @ApiParam(value = "博客分类id", required = true)@Valid @RequestParam("categoryId") Long categoryId,
@@ -84,6 +86,7 @@ public class HomePageController {
 
     @ApiOperation(value = "点赞或取消点赞: 点一下就会转换点赞状态, 需要携带token访问")
     @PutMapping("/blog")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public Result<String> like(@RequestBody BlogLikeDTO blogLikeDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return likesService.likeBlog(blogLikeDTO, Long.valueOf(userId)) ? Result.success("成功") : Result.error("失败");
