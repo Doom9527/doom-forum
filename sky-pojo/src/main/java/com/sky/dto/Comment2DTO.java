@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -18,15 +20,19 @@ public class Comment2DTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     @ApiModelProperty(value = "博客id", required = true)
     private Long postId;
 
+    @NotBlank
     @ApiModelProperty(value = "评论内容", required = true)
     private String content;
 
-    @ApiModelProperty(value = "回复评论id")
+    @NotNull
+    @ApiModelProperty(value = "回复评论id", required = true)
     private Long rootCommentId;
 
-    @ApiModelProperty(value = "回复谁的评论(如果你这个是二级评论就不填)")
+    @NotNull
+    @ApiModelProperty(value = "回复谁的评论", required = true)
     private Long parentId;
 }
