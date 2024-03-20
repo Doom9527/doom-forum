@@ -36,7 +36,7 @@ public class BlogOPController {
     private UserService userService;
 
     @ApiOperation(value = "管理员查看所有博客, 需要携带token访问")
-    @GetMapping("/all")
+    @PostMapping("/all")
     @PreAuthorize("hasAuthority('system:admin:list')")
     public Result<IPage<BlogOPVO>> getAllBlogs(@RequestBody BlogPageDTO dto) {
         Page<Blog> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
@@ -74,7 +74,7 @@ public class BlogOPController {
     }
 
     @ApiOperation(value = "管理员查看所有用户, 需要携带token访问")
-    @GetMapping
+    @PostMapping
     @PreAuthorize("hasAuthority('system:admin:list')")
     public Result<IPage<UserOPVO>> getUsers(@RequestBody UserPageDTO dto) {
         Page<User> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
