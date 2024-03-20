@@ -29,7 +29,7 @@ public class Comment2DTO implements Serializable {
     private String content;
 
     @NotNull
-    @ApiModelProperty(value = "回复评论id", required = true)
+    @ApiModelProperty(value = "根评论(一级评论)id", required = true)
     private Long rootCommentId;
 
     @NotNull
