@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login", "/user/register", "/user/getCaptcha",
                         "/user/check2/**", "/user/check2", "/user/modify2",
                         "/home/blog/**", "/home/cate", "/detail/blog/**",
-                        "/detail/comment").permitAll()
+                        "/detail/comment", "/OP/all").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/api-docs/**","/v2/api-docs/**").permitAll()
                 .antMatchers("/doc.html").permitAll()

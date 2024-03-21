@@ -37,7 +37,6 @@ public class BlogOPController {
 
     @ApiOperation(value = "管理员查看所有博客, 需要携带token访问")
     @PostMapping("/all")
-    @PreAuthorize("hasAuthority('system:admin:list')")
     public Result<IPage<BlogOPVO>> getAllBlogs(@RequestBody BlogPageDTO dto) {
         Page<Blog> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
         IPage<BlogOPVO> data = blogService.getAllBlogsOP(page, dto);
