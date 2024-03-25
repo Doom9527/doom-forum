@@ -39,7 +39,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public List<CommentVO> listComment(Long postId, Integer flag) {
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Comment::getPostId, postId)
-                .eq(Comment::getRootCommentId, 0);
+                .eq(Comment::getRootCommentId, 0)
+                .eq(Comment::getStatus, 0);
         if (flag == 1) {
             wrapper.orderByDesc(Comment::getCreateTime);
         }
