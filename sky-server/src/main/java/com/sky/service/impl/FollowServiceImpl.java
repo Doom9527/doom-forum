@@ -114,4 +114,13 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         List<UserFollowVO> vos = userMapper.getFansByUserId(fansId, userId);
         return vos;
     }
+
+    @Override
+    public Follow selectFollowIf(Long userId, Long userFollowId) {
+        LambdaQueryWrapper<Follow> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Follow::getUserId, userId)
+                .eq(Follow::getFollowUserId, userFollowId)
+                .eq(Follow::getStatus, 1);
+        return baseMapper.selectOne(wrapper);
+    }
 }

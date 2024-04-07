@@ -71,7 +71,7 @@ public class HomePageController {
     public Result<String> publishBlog(@ApiParam(value = "博客标题", required = true) @Valid @RequestParam("title") String title,
                                       @ApiParam(value = "博客内容", required = true) @Valid @RequestParam("content") String content,
                                       @ApiParam(value = "博客分类id", required = true)@Valid @RequestParam("categoryId") Long categoryId,
-                                      @ApiParam(value = "图片", required = true) @Valid @RequestParam("picture")MultipartFile picture,
+                                      @ApiParam(value = "图片", required = true) @Valid @RequestPart("picture")MultipartFile picture,
                                       HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         BlogDTO blogDTO = BlogDTO.builder()

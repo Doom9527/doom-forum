@@ -20,7 +20,7 @@ public interface BlogService extends IService<Blog> {
      */
     boolean publishBlog(BlogDTO blogDTO);
 
-    Integer updateMySQL(String title, String content, Long categoryId, Long authorId);
+    Integer updateMySQL(String title, String content, Long categoryId, Long authorId, String url);
 
     /**
      * 更新博客图片url

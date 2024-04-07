@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -260,5 +261,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .totalCount(totals)
                 .build();
         return vo;
+    }
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteUserById(Long id) {
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(User::getStatus, 1)
+                .eq(User::getId, id);
+        return baseMapper.update(null, wrapper) > 0;
     }
 }

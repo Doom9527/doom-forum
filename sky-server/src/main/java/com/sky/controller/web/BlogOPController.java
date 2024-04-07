@@ -80,4 +80,11 @@ public class BlogOPController {
         IPage<UserOPVO> data = userService.selectAll(page);
         return Result.success(data);
     }
+
+    @ApiOperation(value = "删除用户, 携带token")
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('system:admin:list')")
+    public Result<String> delete(@ApiParam(value = "用户id", required = true) @PathVariable Long id) {
+        return userService.deleteUserById(id) ? Result.success("删除成功") : Result.error("删除失败");
+    }
 }

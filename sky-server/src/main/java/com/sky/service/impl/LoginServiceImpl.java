@@ -41,7 +41,8 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserLoginVO login(UserLoginDTO userLoginDTO, Object ipAddr) {
         //验证码校验
-        if (CaptchaUtils.verifyCaptcha(userLoginDTO.getCode(), ipAddr)) {
+        Object cacheObject = redisCache.getCacheObject((String) ipAddr);
+        if (!CaptchaUtils.verifyCaptcha(userLoginDTO.getCode(), cacheObject)) {
             throw new LoginFailedException(MessageConstant.VERIFY_CODE_ERROR);
         }
         redisCache.deleteObject((String) ipAddr);

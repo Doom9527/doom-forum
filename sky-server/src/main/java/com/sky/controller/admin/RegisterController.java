@@ -35,7 +35,7 @@ public class RegisterController {
                                    @ApiParam(value = "密码", required = true) @RequestParam("password") String password,
                                    @ApiParam(value = "密保id", required = true) @RequestParam("securityProblem") Long securityProblem,
                                    @ApiParam(value = "密保答案", required = true) @RequestParam("answer") String answer,
-                                   @ApiParam(value = "头像") @RequestParam("avatar") MultipartFile avatar){
+                                   @ApiParam(value = "头像") @RequestPart("avatar") MultipartFile avatar){
         UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
                 .userName(userName)
                 .password(password)

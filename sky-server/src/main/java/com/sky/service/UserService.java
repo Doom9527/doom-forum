@@ -11,6 +11,7 @@ import com.sky.vo.MyDetailVO;
 import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -95,4 +96,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     MyDetailVO getMyDetail(Long userId);
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    boolean deleteUserById(Long id);
 }

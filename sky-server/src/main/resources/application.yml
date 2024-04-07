@@ -15,8 +15,8 @@ spring:
 
   redis:
     host: 111.230.69.151
-    port: 6666
-    password: 123456
+    port: 6379
+    password: 123456789
     lettuce:
       pool:
         max-active: 8
@@ -30,6 +30,10 @@ spring:
     virtual-host: /javaCoreHomework # 虚拟主机
     username: redo # 用户名
     password: 123 # 密码
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis:
   #mapper配置文件

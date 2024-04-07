@@ -35,4 +35,6 @@ public interface LikesService extends IService<Likes> {
      * @return
      */
     List<Likes> getAllAliveLikes();
+
+    Likes selectLikesIf(Long postId, Long userId);
 }

@@ -45,4 +45,6 @@ public interface FollowService extends IService<Follow> {
      * @return
      */
     List<UserFollowVO> selectFansById(Long fansId, Long userId);
+
+    Follow selectFollowIf(Long userId, Long userFollowId);
 }

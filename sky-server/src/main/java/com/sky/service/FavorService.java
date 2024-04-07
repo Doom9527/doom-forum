@@ -36,4 +36,6 @@ public interface FavorService extends IService<Favor> {
      * @return
      */
     List<Favor> selectAllFavorsAlive();
+
+    Favor selectFavorIf(Long postId, Long userId);
 }

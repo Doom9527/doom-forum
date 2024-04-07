@@ -97,4 +97,13 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
         wrapper.eq(Likes::getStatus, 1);
         return baseMapper.selectList(wrapper);
     }
+
+    @Override
+    public Likes selectLikesIf(Long postId, Long userId) {
+        LambdaQueryWrapper<Likes> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Likes::getPostId, postId)
+                .eq(Likes::getUserId, userId)
+                .eq(Likes::getStatus, 1);
+        return baseMapper.selectOne(wrapper);
+    }
 }

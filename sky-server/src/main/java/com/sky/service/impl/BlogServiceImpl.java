@@ -30,9 +30,6 @@ import java.util.stream.Stream;
 public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements BlogService {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
     private OssService ossService;
 
     @Autowired
@@ -43,6 +40,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Autowired
     private FavorService favorService;
+
+    @Autowired
+    private FollowService followService;
 
     @Autowired
     private CommentService commentService;
@@ -64,20 +64,20 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 .authorId(blogDTO.getAuthorId())
                 .build();
         String Json = JSONUtil.toJsonStr(blogPublishInfo);
-        rabbitTemplate.convertAndSend(RabbitMQConstant.BLOG_PUBLISH_EXCHANGE, RabbitMQConstant.BLOG_PUBLISH_KEY, Json);
-
         String url = ossService.uploadFileBlogPic(blogDTO.getPicture());
-        updateURL(url, blogPublishInfo.getAuthorId());
+        //rabbitTemplate.convertAndSend(RabbitMQConstant.BLOG_PUBLISH_EXCHANGE, RabbitMQConstant.BLOG_PUBLISH_KEY, Json);
+        updateMySQL(blogDTO.getTitle(), blogDTO.getContent(), blogDTO.getCategoryId(), blogDTO.getAuthorId(), url);
         log.info("用户id: "+blogPublishInfo.getAuthorId() + " 存入url: " + url);
         return true;
     }
 
     @Override
-    public Integer updateMySQL(String title, String content, Long categoryId, Long authorId) {
+    public Integer updateMySQL(String title, String content, Long categoryId, Long authorId, String url) {
         Blog blog = Blog.builder()
                 .title(title)
                 .content(content)
                 .categoryId(categoryId)
+                .picture(url)
                 .authorId(authorId).build();
         return baseMapper.insert(blog);
     }
@@ -116,7 +116,21 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Override
     public BlogDetailVO getBlogByBlogId(Long userId, Long blogId) {
         List<BlogDetailVO> vos = baseMapper.selectBlogDetail(userId, blogId);
-        return vos.get(0);
+        BlogDetailVO vo = vos.get(0);
+        vo.setStatus1(0);
+        vo.setStatus2(0);
+        vo.setStatus3(0);
+        log.info(String.valueOf(vos.size()));
+        if (likesService.selectLikesIf(blogId, userId) != null) {
+            vo.setStatus1(1);
+        }
+        if (favorService.selectFavorIf(blogId, userId) != null) {
+            vo.setStatus2(1);
+        }
+        if (followService.selectFollowIf(userId, vo.getAuthorId()) != null) {
+            vo.setStatus3(1);
+        }
+        return vo;
     }
 
     /**

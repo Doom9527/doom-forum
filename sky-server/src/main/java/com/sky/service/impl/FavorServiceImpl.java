@@ -100,4 +100,13 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
         wrapper.eq(Favor::getStatus, 1);
         return baseMapper.selectList(wrapper);
     }
+
+    @Override
+    public Favor selectFavorIf(Long postId, Long userId) {
+        LambdaQueryWrapper<Favor> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Favor::getPostId, postId)
+                .eq(Favor::getUserId, userId)
+                .eq(Favor::getStatus, 1);
+        return baseMapper.selectOne(wrapper);
+    }
 }

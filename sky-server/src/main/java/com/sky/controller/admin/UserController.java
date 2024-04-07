@@ -39,7 +39,7 @@ public class UserController {
     @ApiOperation(value = "用户修改头像: 用户登录后进行,携带token")
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('system:user:list')")
-    public Result<String> uploadOssFile(@ApiParam(value = "头像文件", required = true) MultipartFile file, HttpServletRequest request) {
+    public Result<String> uploadOssFile(@ApiParam(value = "头像文件", required = true) @RequestPart MultipartFile file, HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         User user = userService.getUserById(Long.valueOf(id));
         // MultipartFile -> 获取上传文件

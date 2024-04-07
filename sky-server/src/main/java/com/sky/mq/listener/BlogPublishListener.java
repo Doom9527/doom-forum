@@ -36,7 +36,7 @@ public class BlogPublishListener {
     public void listenBlogPublish(@Payload String payload){
         // 更新数据库
         BlogPublishInfo blogPublishInfo = getBlogPublishInfo(payload);
-        blogService.updateMySQL(blogPublishInfo.getTitle(), blogPublishInfo.getContent(),blogPublishInfo.getCategoryId(),blogPublishInfo.getAuthorId());
+        blogService.updateMySQL(blogPublishInfo.getTitle(), blogPublishInfo.getContent(),blogPublishInfo.getCategoryId(),blogPublishInfo.getAuthorId(), "1");
         log.info("MQ更新数据库成功");
     }
 
