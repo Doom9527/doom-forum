@@ -206,8 +206,6 @@
                 LEFT JOIN
             sys_categories ct ON b.category_id = ct.id
         WHERE
-            b.status = 0 AND
-            b.examine = 1 AND
             b.author_id = #{userId}
         GROUP BY
             b.id,

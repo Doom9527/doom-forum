@@ -173,7 +173,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public boolean deleteBlogById(Long id, Long userId) {
         User user = userService.getUserById(userId);
         LambdaUpdateWrapper<Blog> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(Blog::getStatus, 0)
+        wrapper.set(Blog::getStatus, 1)
                 .eq(Blog::getId, id);
         if (user.getUserType().equals("1") || user.getUserType().equals("2")) {
             wrapper.eq(Blog::getAuthorId, userId);
