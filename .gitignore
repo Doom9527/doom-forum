@@ -1,6 +1,7 @@
 ### Custom Template
 
 .idea
+sky-server/src/main/resources/application-dev.yml
 
 ### Java template
 # Compiled class file

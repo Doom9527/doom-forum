@@ -8,15 +8,15 @@ spring:
     allow-circular-references: true
   datasource:
     druid:
-      driver-class-name: ${sky.datasource.driver-class-name}
-      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+      driver-class-name: ${redo.datasource.driver-class-name}
+      url: jdbc:mysql://${redo.datasource.host}:${redo.datasource.port}/${redo.datasource.database}?serverTimezone=UTC
+      username: ${redo.datasource.username}
+      password: ${redo.datasource.password}
 
   redis:
-    host: localhost
-    port: 6379
-    password: redo
+    host: ${redo.redis.host}
+    port: ${redo.redis.port}
+    password: ${redo.redis.password}
     lettuce:
       pool:
         max-active: 8
@@ -24,12 +24,12 @@ spring:
         min-idle: 0
         max-wait: 100ms
 
-#  rabbitmq:
-#    host: 111.230.69.151 # 你的虚拟机IP
-#    port: 5672 # 端口
-#    virtual-host: /javaCoreHomework # 虚拟主机
-#    username: redo # 用户名
-#    password: 123 # 密码
+  rabbitmq:
+    host: ${redo.rabbitmq.host}
+    port: ${redo.rabbitmq.port}
+    virtual-host: ${redo.rabbitmq.virtual-host}
+    username: ${redo.rabbitmq.username}
+    password: ${redo.rabbitmq.password}
 
 mybatis:
   #mapper配置文件
@@ -44,7 +44,6 @@ mybatis-plus:
     db-config:
       id-type: auto
 
-
 logging:
   level:
     com:
@@ -53,15 +52,6 @@ logging:
         service: info
         controller: info
 
-
-#sky:
-#  jwt:
-#    # 设置jwt签名加密时使用的秘钥
-#    admin-secret-key: itcast
-#    # 设置jwt过期时间
-#    admin-ttl: 7200000
-#    # 设置前端传递过来的令牌名称
-#    admin-token-name: token
 swagger:
   enabled: true
 
@@ -69,7 +59,7 @@ swagger:
 aliyun:
   oss:
     file:
-      endpoint: ***********************
-      keyid: ***********************
-      keysecret: ***********************
-      bucketname: ***********************
+      endpoint: ${redo.aliyun.oss.file.endpoint}
+      keyid: ${redo.aliyun.oss.file.keyid}
+      keysecret: ${redo.aliyun.oss.file.keysecret}
+      bucketname: ${redo.aliyun.oss.file.bucketname}
