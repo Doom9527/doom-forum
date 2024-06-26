@@ -1,14 +1,9 @@
 sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    host: 111.230.69.151
-#    port: 5556
-#    database: sg_security1
-#    username: root
-#    password: GAM.10188
-    host: 111.230.69.151
+    host: localhost
     port: 3306
     database: myweng
-    username: myWeng
-    password: 8eeEaJ5WRT6dJLFB
+    username: root
+    password: root
 

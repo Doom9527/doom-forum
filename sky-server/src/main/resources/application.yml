@@ -1,5 +1,5 @@
 server:
-  port: 8999
+  port: 8080
 
 spring:
   profiles:
@@ -14,9 +14,9 @@ spring:
       password: ${sky.datasource.password}
 
   redis:
-    host: 111.230.69.151
-    port: 6666
-    password: 123456
+    host: localhost
+    port: 6379
+    password: redo
     lettuce:
       pool:
         max-active: 8
@@ -24,12 +24,12 @@ spring:
         min-idle: 0
         max-wait: 100ms
 
-  rabbitmq:
-    host: 111.230.69.151 # 你的虚拟机IP
-    port: 5672 # 端口
-    virtual-host: /javaCoreHomework # 虚拟主机
-    username: redo # 用户名
-    password: 123 # 密码
+#  rabbitmq:
+#    host: 111.230.69.151 # 你的虚拟机IP
+#    port: 5672 # 端口
+#    virtual-host: /javaCoreHomework # 虚拟主机
+#    username: redo # 用户名
+#    password: 123 # 密码
 
 mybatis:
   #mapper配置文件
