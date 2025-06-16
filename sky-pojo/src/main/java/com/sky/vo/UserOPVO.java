@@ -35,6 +35,9 @@ public class UserOPVO implements Serializable {
     @ApiModelProperty(value = "用户类型: 1普通 2游客 3管理员")
     private String userType;
 
+    @ApiModelProperty(value = "用户类型: 1普通 2游客 3管理员")
+    private String phonenumber;
+
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @TableField(fill = FieldFill.INSERT)

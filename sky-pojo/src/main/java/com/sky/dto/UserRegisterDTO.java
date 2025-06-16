@@ -33,11 +33,11 @@ public class UserRegisterDTO implements Serializable {
 //    @NotBlank(message = "昵称为空")
 //    @ApiModelProperty("昵称")
 //    private String nickName;
-//
-//    @NotBlank(message = "手机号为空")
-//    @ApiModelProperty("手机号")
-//    private String phonenumber;
-//
+
+    @NotBlank(message = "手机号为空")
+    @ApiModelProperty("手机号")
+    private String phonenumber;
+
 //    @NotBlank(message = "邮箱为空")
 //    @Email(message = "邮箱格式不正确")
 //    @ApiModelProperty("邮箱号")

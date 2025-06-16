@@ -22,4 +22,6 @@ public class UserPageDTO implements Serializable {
 
     @ApiModelProperty(value = "页面大小")
     private Integer pageSize = 10;
+
+    private Integer phoneStatus;
 }

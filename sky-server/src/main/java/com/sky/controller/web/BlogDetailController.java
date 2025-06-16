@@ -42,6 +42,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "查看博客详情")
     @GetMapping("/blog/{blogId}")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<BlogDetailVO> getDetail(@PathVariable Long blogId, HttpServletRequest request) {
 
         if (blogService.getAliveBlogById(blogId) == null) {
@@ -59,7 +60,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "收藏或取消收藏: 点一下就会转换收藏状态, 需要携带token访问")
     @PutMapping("/favor")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<String> favor(@RequestBody BlogFavorDTO blogFavorDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return favorService.favorBlogDetail(blogFavorDTO, Long.valueOf(userId)) ? Result.success("成功") : Result.error("失败");
@@ -67,6 +68,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "按博客id获取评论")
     @GetMapping("/comment")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<List<CommentVO>> getComments(@ApiParam(value = "博客id", required = true) @Valid @RequestParam Long postId,
                                                @ApiParam(value = "查询类型: 1最新 2最热") @Valid @RequestParam Integer flag) {
         List<CommentVO> vos = commentService.listComment(postId, flag);
@@ -75,7 +77,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "发一级评论, 需要携带token访问")
     @PostMapping("/comment")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<String> createComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return commentService.saveComment(commentDTO, Long.valueOf(userId)) > 0 ? Result.success() : Result.error("评论失败");
@@ -83,7 +85,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "发二级评论或其子评论, 需要携带token访问")
     @PostMapping("/comment2")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<String> createComment2(@RequestBody Comment2DTO comment2DTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return commentService.saveMoreComment(comment2DTO, Long.valueOf(userId)) > 0 ? Result.success() : Result.error("评论失败");
@@ -91,7 +93,7 @@ public class BlogDetailController {
 
     @ApiOperation(value = "关注或取消关注用户: 点一下就会转换关注状态, 携带token访问 ")
     @PostMapping("/follow")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<String> followUser(@RequestBody UserFollowDTO userFollowDTO, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return followService.createFollow(userFollowDTO, Long.valueOf(userId)) ? Result.success("成功") : Result.error("失败");

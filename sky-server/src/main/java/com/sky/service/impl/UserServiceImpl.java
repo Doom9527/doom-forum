@@ -7,27 +7,29 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
-import com.sky.dto.PageDTO;
+import com.sky.dto.UserPhoneAuditDTO;
+import com.sky.dto.UserUpdatePhoneDTO;
 import com.sky.entity.Follow;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.exception.ObjectNullException;
-import com.sky.exception.PasswordErrorException;
-import com.sky.mapper.FollowMapper;
 import com.sky.mapper.UserMapper;
-import com.sky.result.PageQuery;
-import com.sky.service.*;
+import com.sky.service.FollowService;
+import com.sky.service.ProblemService;
+import com.sky.service.UserService;
+import com.sky.utils.JwtUtils;
 import com.sky.utils.RedisCache;
 import com.sky.vo.MyDetailVO;
 import com.sky.vo.UserDetailVO;
 import com.sky.vo.UserFollowVO;
 import com.sky.vo.UserOPVO;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -186,6 +188,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                             .status(user.getStatus())
                             .avatar(user.getAvatar())
                             .userType(user.getUserType())
+                            .phonenumber(user.getPhonenumber())
                             .createTime(user.getCreateTime())
                             .updateTime(user.getUpdateTime()).build();
                     return vo;
@@ -274,5 +277,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.set(User::getStatus, 1)
                 .eq(User::getId, id);
         return baseMapper.update(null, wrapper) > 0;
+    }
+
+    @Override
+    @Transactional
+    public void updatePhone(UserUpdatePhoneDTO userUpdatePhoneDTO, String token) {
+
+        // 获取当前登录用户
+
+        User currentUser = this.getById(JwtUtils.getUserId(token));
+        if (currentUser == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 更新手机号和审核状态
+        User user = new User();
+        user.setId(currentUser.getId());
+        user.setPhonenumber(userUpdatePhoneDTO.getPhonenumber());
+        user.setPhoneStatus(0); // 设置为待审核状态
+        this.updateById(user);
+    }
+
+    @Override
+    @Transactional
+    public void auditPhone(UserPhoneAuditDTO userPhoneAuditDTO) {
+        // 检查用户是否存在
+        User user = this.getById(userPhoneAuditDTO.getUserId());
+
+        // 更新审核状态
+        User updateUser = new User();
+        updateUser.setId(userPhoneAuditDTO.getUserId());
+        updateUser.setPhoneStatus(userPhoneAuditDTO.getPhoneStatus());
+        this.updateById(updateUser);
     }
 }

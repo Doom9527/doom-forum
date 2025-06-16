@@ -3,6 +3,7 @@ package com.sky.controller.web;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.dto.UserPageDTO;
+import com.sky.dto.UserPhoneAuditDTO;
 import com.sky.entity.Blog;
 import com.sky.entity.User;
 import com.sky.result.Result;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @Slf4j
@@ -37,6 +40,7 @@ public class BlogOPController {
 
     @ApiOperation(value = "管理员查看所有博客, 需要携带token访问")
     @PostMapping("/all")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<IPage<BlogOPVO>> getAllBlogs(@RequestBody BlogPageDTO dto) {
         Page<Blog> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
         IPage<BlogOPVO> data = blogService.getAllBlogsOP(page, dto);
@@ -45,28 +49,28 @@ public class BlogOPController {
 
     @ApiOperation(value = "管理员通过审核博客, 需要携带token访问")
     @PutMapping("/{ids}")
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<Integer> pass(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
         return Result.success(blogService.passBlogById(ids));
     }
 
     @ApiOperation(value = "管理员删除博客, 需要携带token访问")
     @PutMapping("/delete2/{ids}")
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<Integer> delete(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
         return Result.success(blogService.deleteBlogByIds(ids));
     }
 
     @ApiOperation(value = "管理员恢复删除的博客, 需要携带token访问")
     @PutMapping("/recover/{ids}")
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<Integer> recover(@ApiParam(value = "博客id数组", required = true) @PathVariable Long[] ids) {
         return Result.success(blogService.recoverBlogByIds(ids));
     }
 
     @ApiOperation(value = "修改评论状态, 可以选择删除或恢复, 需要携带token访问")
     @PutMapping("/comment")
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<String> checkComments(@ApiParam(value = "删除状态(和其他的不一样): 0未删除 1删除") @RequestParam Integer status,
                                         @ApiParam(value = "评论id") @RequestParam Integer commentId) {
         return commentService.modifyComments(commentId, status) ? Result.success("修改成功") : Result.error("修改失败");
@@ -74,7 +78,7 @@ public class BlogOPController {
 
     @ApiOperation(value = "管理员查看所有用户, 需要携带token访问")
     @PostMapping
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<IPage<UserOPVO>> getUsers(@RequestBody UserPageDTO dto) {
         Page<User> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
         IPage<UserOPVO> data = userService.selectAll(page);
@@ -83,8 +87,16 @@ public class BlogOPController {
 
     @ApiOperation(value = "删除用户, 携带token")
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('system:admin:list')")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
     public Result<String> delete(@ApiParam(value = "用户id", required = true) @PathVariable Long id) {
         return userService.deleteUserById(id) ? Result.success("删除成功") : Result.error("删除失败");
+    }
+
+    @PutMapping("/phone/audit")
+    @ApiOperation("审核用户手机号")
+    @PreAuthorize("hasAuthority('system:redo:admin')")
+    public Result auditPhone(@RequestBody @Valid UserPhoneAuditDTO userPhoneAuditDTO) {
+        userService.auditPhone(userPhoneAuditDTO);
+        return Result.success();
     }
 }

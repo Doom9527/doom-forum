@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.UserUpdatePhoneDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.result.Result;
@@ -38,7 +39,7 @@ public class UserController {
 
     @ApiOperation(value = "用户修改头像: 用户登录后进行,携带token")
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<String> uploadOssFile(@ApiParam(value = "头像文件", required = true) @RequestPart MultipartFile file, HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         User user = userService.getUserById(Long.valueOf(id));
@@ -50,7 +51,7 @@ public class UserController {
 
     @ApiOperation(value = "查询用户密保问题: 用户登录后进行,携带token")
     @GetMapping("/check")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<Problem> getAnswer(HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         Problem problem = userService.getProblemByUserId(userId);
@@ -59,7 +60,7 @@ public class UserController {
 
     @ApiOperation(value = "验证密保问题: 用户登录后进行,携带token. true成功,false失败. 成功后在30分钟内修改密码,否则过期失效")
     @PostMapping("/check")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<Boolean> check(@ApiParam(value = "答案", required = true) @Valid @RequestParam String answer, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         Boolean flag = userService.checkAnswer(answer, userId);
@@ -68,7 +69,7 @@ public class UserController {
 
     @ApiOperation(value = "修改密码: 用户登录后进行,携带token")
     @PutMapping("/modify")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:user:tour')")
     public Result<String> modify(@ApiParam(value = "密码", required = true) @Valid @RequestParam String password, HttpServletRequest request) {
         String userId = JwtUtils.getUserId(request.getHeader("token"));
         return userService.modifyPassword(password, userId) ? Result.success() : Result.error("0");
@@ -97,5 +98,12 @@ public class UserController {
                                  @ApiParam(value = "用户名", required = true) @Valid @RequestParam String userName) {
         User user = userService.getUserByUserName(userName);;
         return userService.modifyPassword(password, user.getId().toString()) ? Result.success() : Result.error("0");
+    }
+
+    @PutMapping("/phone")
+    @ApiOperation("修改手机号")
+    public Result updatePhone(@RequestBody @Valid UserUpdatePhoneDTO userUpdatePhoneDTO, HttpServletRequest request) {
+        userService.updatePhone(userUpdatePhoneDTO, request.getHeader("token"));
+        return Result.success();
     }
 }

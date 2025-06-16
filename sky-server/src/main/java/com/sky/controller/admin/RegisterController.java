@@ -2,10 +2,8 @@ package com.sky.controller.admin;
 
 import com.sky.dto.UserRegisterDTO;
 import com.sky.result.Result;
-import com.sky.service.OssService;
 import com.sky.service.ProblemService;
 import com.sky.service.RegisterService;
-import com.sky.service.UserService;
 import com.sky.vo.ProblemVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -35,12 +32,14 @@ public class RegisterController {
                                    @ApiParam(value = "密码", required = true) @RequestParam("password") String password,
                                    @ApiParam(value = "密保id", required = true) @RequestParam("securityProblem") Long securityProblem,
                                    @ApiParam(value = "密保答案", required = true) @RequestParam("answer") String answer,
+                                   @ApiParam(value = "手机号", required = true) @RequestParam("phonenumber") String phonenumber,
                                    @ApiParam(value = "头像") @RequestPart("avatar") MultipartFile avatar){
         UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder()
                 .userName(userName)
                 .password(password)
                 .securityProblem(securityProblem)
                 .answer(answer)
+                .phonenumber(phonenumber)
                 .avatar(avatar).build();
         return registerService.register(userRegisterDTO) ? Result.success("注册成功") : Result.error("注册失败");
     }

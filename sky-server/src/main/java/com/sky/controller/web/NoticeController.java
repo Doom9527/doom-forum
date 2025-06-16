@@ -35,7 +35,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看新增关注, 携带token")
     @GetMapping("/follow")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:farmer')")
     public Result<List<UserFollowVO>> getUserFans(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<UserFollowVO> vos = followService.selectFansById(Long.valueOf(id), Long.valueOf(id));
@@ -44,7 +44,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看赞和收藏, 携带token")
     @GetMapping("/total")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:farmer')")
     public Result<List<NoticeTotalVO>> getTotal(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<NoticeTotalVO> vos = blogService.getNewLikeAndFavor(Long.valueOf(id));
@@ -53,7 +53,7 @@ public class NoticeController {
 
     @ApiOperation(value = "查看新增评论, 携带token")
     @GetMapping("/comment")
-    @PreAuthorize("hasAuthority('system:user:list')")
+    @PreAuthorize("hasAuthority('system:redo:farmer')")
     public Result<List<NoticeCommentVO>> getComment(HttpServletRequest request) {
         String id = JwtUtils.getUserId(request.getHeader("token"));
         List<NoticeCommentVO> vos = commentService.getNewComment(Long.valueOf(id));

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sky.dto.PageDTO;
+import com.sky.dto.UserPhoneAuditDTO;
+import com.sky.dto.UserUpdatePhoneDTO;
 import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.result.PageQuery;
@@ -103,4 +105,16 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean deleteUserById(Long id);
+
+    /**
+     * 修改手机号
+     * @param userUpdatePhoneDTO 手机号信息
+     */
+    void updatePhone(UserUpdatePhoneDTO userUpdatePhoneDTO, String token);
+
+    /**
+     * 审核用户手机号
+     * @param userPhoneAuditDTO 审核信息
+     */
+    void auditPhone(UserPhoneAuditDTO userPhoneAuditDTO);
 }

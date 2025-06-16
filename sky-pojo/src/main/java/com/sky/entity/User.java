@@ -88,4 +88,6 @@ public class User implements Serializable {
     private Integer delFlag;
 
     private String answer;
+
+    private Integer phoneStatus;
 }
