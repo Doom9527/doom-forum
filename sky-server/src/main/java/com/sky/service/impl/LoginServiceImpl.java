@@ -5,6 +5,7 @@ import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
 import com.sky.exception.UserNameOrPasswordErrorException;
+import com.sky.mapper.UserRoleMapper;
 import com.sky.service.LoginService;
 import com.sky.service.UserService;
 import com.sky.testPojo.LoginUser;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -37,6 +39,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserService userService;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public UserLoginVO login(UserLoginDTO userLoginDTO, Object ipAddr) {
@@ -75,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
                 .id(Long.valueOf(userId))
                 .userName(loginUser.getUsername())
                 .token(token)
-                .userType(userByUserName.getUserType())
+                .userType(String.valueOf(userRoleMapper.selectRoleIdsByUserId(Long.valueOf(userId))))
                 .avatar(userService.getUserById(Long.valueOf(userId)).getAvatar())
                 .build();
         return userLoginVO;

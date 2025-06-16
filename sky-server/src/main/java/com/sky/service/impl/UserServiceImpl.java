@@ -14,6 +14,7 @@ import com.sky.entity.Problem;
 import com.sky.entity.User;
 import com.sky.exception.ObjectNullException;
 import com.sky.mapper.UserMapper;
+import com.sky.mapper.UserRoleMapper;
 import com.sky.service.FollowService;
 import com.sky.service.ProblemService;
 import com.sky.service.UserService;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -47,6 +50,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private FollowService followService;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public List<User> getAllUsers() {
@@ -176,9 +182,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public IPage<UserOPVO> selectAll(Page<User> page) {
+    public IPage<UserOPVO> selectAll(Page<User> page, Integer phoneStatus) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getStatus, 0);
+        wrapper.eq(phoneStatus != null, User::getPhoneStatus, phoneStatus);
         Page<User> pages = baseMapper.selectPage(page, wrapper);
         List<UserOPVO> vos = pages.getRecords().stream()
                 .map(user -> {
@@ -187,9 +194,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                             .userName(user.getUserName())
                             .status(user.getStatus())
                             .avatar(user.getAvatar())
-                            .userType(user.getUserType())
+                            .userType(userRoleMapper.selectRoleIdsByUserId(user.getId()).toString())
                             .phonenumber(user.getPhonenumber())
                             .createTime(user.getCreateTime())
+                            .phoneStauts(user.getPhoneStatus())
                             .updateTime(user.getUpdateTime()).build();
                     return vo;
                 }).collect(Collectors.toList());

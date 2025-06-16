@@ -81,7 +81,7 @@ public class BlogOPController {
     @PreAuthorize("hasAuthority('system:redo:tour')")
     public Result<IPage<UserOPVO>> getUsers(@RequestBody UserPageDTO dto) {
         Page<User> page = new Page<>(dto.getPageNumber(), dto.getPageSize());
-        IPage<UserOPVO> data = userService.selectAll(page);
+        IPage<UserOPVO> data = userService.selectAll(page, dto.getPhoneStatus());
         return Result.success(data);
     }
 

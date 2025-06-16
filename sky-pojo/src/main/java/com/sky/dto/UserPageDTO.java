@@ -23,5 +23,6 @@ public class UserPageDTO implements Serializable {
     @ApiModelProperty(value = "页面大小")
     private Integer pageSize = 10;
 
+    @ApiModelProperty(value = "手机号审核状态：0为待审核 1为通过")
     private Integer phoneStatus;
 }

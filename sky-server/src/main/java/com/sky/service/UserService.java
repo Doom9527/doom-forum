@@ -77,7 +77,7 @@ public interface UserService extends IService<User> {
      * @param page
      * @return
      */
-    IPage<UserOPVO> selectAll(Page<User> page);
+    IPage<UserOPVO> selectAll(Page<User> page, Integer phoneStatus);
 
     /**
      * 查看关注列表
