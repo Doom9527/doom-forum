@@ -26,6 +26,12 @@ public class MyDetailVO implements Serializable {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
+    @ApiModelProperty(value = "手机号")
+    private String phonenumber;
+
+    @ApiModelProperty(value = "个人信息审核状态")
+    private Integer phoneStatus;
+
     @ApiModelProperty(value = "关注数")
     private Long followCount;
 

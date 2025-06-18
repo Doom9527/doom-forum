@@ -267,6 +267,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .id(user.getId())
                 .userName(user.getUserName())
                 .avatar(user.getAvatar())
+                .phonenumber(user.getPhonenumber())
+                .phoneStatus(user.getPhoneStatus())
                 .followCount(follows)
                 .fansCount(fans)
                 .totalCount(totals)

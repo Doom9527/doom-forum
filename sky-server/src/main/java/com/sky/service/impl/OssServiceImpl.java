@@ -2,6 +2,9 @@ package com.sky.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sky.entity.User;
+import com.sky.mapper.UserMapper;
 import com.sky.service.OssService;
 import com.sky.service.UserService;
 import com.sky.utils.ConstantPropertiesUtils;
@@ -14,7 +17,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
-public class OssServiceImpl implements OssService {
+public class OssServiceImpl extends ServiceImpl<UserMapper, User> implements OssService {
 
     @Autowired
     private UserService userService;
@@ -82,6 +85,13 @@ public class OssServiceImpl implements OssService {
             userService.addAvatarURL(url, userService.getUserByUserName(username).getId());
             // 关闭oss
             ossClient.shutdown();
+
+            //修改审核状态
+            User user = new User();
+            user.setId(userService.getUserByUserName(username).getId());
+            user.setPhoneStatus(0); // 设置为待审核状态
+            this.updateById(user);
+
             return url;
         } catch (IOException e) {
             e.printStackTrace();
